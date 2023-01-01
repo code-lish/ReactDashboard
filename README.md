@@ -1,6 +1,5 @@
-# melobitProject
+# ReactDashboard
 
 `# npm install`
 
 `# npm start`
-# CRA

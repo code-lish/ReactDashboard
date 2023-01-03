@@ -1,7 +1,11 @@
+import { Button} from "@mui/material";
+
 const Home = () => {
   return (
     <>
-      <h1>Hello world</h1>
+      <Button color="success" variant="contained">
+        Hello
+      </Button>
     </>
   );
 };

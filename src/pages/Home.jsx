@@ -1,9 +1,9 @@
-import { Button} from "@mui/material";
+import { Button } from "@mui/material";
 
 const Home = () => {
   return (
     <>
-      <Button color="success" variant="contained">
+      <Button variant="outlined" color="error">
         Hello
       </Button>
     </>

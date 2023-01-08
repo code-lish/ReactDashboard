@@ -28,10 +28,10 @@ const Navbar = () => {
   return (
     <AppBar
       sx={{
-        position: "static",
-        background: `none`,
+        background: theme.palette.bgColor.main,
         boxShadow: "none",
       }}
+      position="sticky"
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
         {/* LEFT SIDE */}
@@ -94,17 +94,24 @@ const Navbar = () => {
               />
             )}
           </IconButton>
-
-          <IconButton>
+          <IconButton
+            sx={{
+              display: {
+                xs: "none",
+                sm: "flex",
+              },
+            }}
+          >
             <SettingsOutlined
-              sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+              sx={{
+                fontSize: "25px",
+                color: theme.palette.primary.main,
+              }}
             />
           </IconButton>
           <Notifications />
           <Messages />
-          <FlexBetween>
-            <Profile />
-          </FlexBetween>
+          <Profile />
         </FlexBetween>
       </Toolbar>
     </AppBar>

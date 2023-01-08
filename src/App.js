@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "../src/components/layout/Layout";
-import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./components/NotFound";
 
 import { useSelector } from "react-redux";
@@ -22,7 +22,7 @@ function App() {
         <CssBaseline />
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
+            <Route index element={<Dashboard />} />
 
             {/* Not found page */}
             <Route path="*" element={<NotFound />} />

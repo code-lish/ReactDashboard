@@ -101,10 +101,18 @@ const LeftSidebar = () => {
   ];
 
   return (
-    <Box sx={{ height: "100vh" }}>
+    <Box
+      sx={{
+        position: "sticky",
+        top: "0",
+        height: "100%",
+        zIndex: "2000",
+        backgroundColor: theme.palette.bgColor[1000],
+      }}
+    >
       <Sidebar
         style={{
-          height: "100%",
+          height: "100vh",
           borderRight: "none",
           borderLeft: "none",
         }}

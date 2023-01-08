@@ -8,6 +8,9 @@ import {
   BarChartOutlined,
   PieChartOutlineOutlined,
   TimelineOutlined,
+  PeopleOutlined,
+  ContactsOutlined,
+  ReceiptOutlined,
 } from "@mui/icons-material";
 import { useState } from "react";
 import SidebarItem from "./SidebarItem";
@@ -26,6 +29,34 @@ const LeftSidebar = () => {
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
         />
       ),
+      selected,
+      setSelected,
+    },
+    {
+      title: "Data",
+    },
+    {
+      title: "Manage Team",
+      to: "/manageteam",
+      icon: (
+        <PeopleOutlined
+          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+        />
+      ),
+      selected,
+      setSelected,
+    },
+    {
+      title: "Contacts Information",
+      to: "/contacts",
+      icon: <ContactsOutlined />,
+      selected,
+      setSelected,
+    },
+    {
+      title: "Invoices Balances",
+      to: "/invoices",
+      icon: <ReceiptOutlined />,
       selected,
       setSelected,
     },
@@ -109,6 +140,7 @@ const LeftSidebar = () => {
         zIndex: "2000",
         backgroundColor: theme.palette.bgColor[1000],
       }}
+      className="scrollbar"
     >
       <Sidebar
         style={{
@@ -143,7 +175,10 @@ const LeftSidebar = () => {
       >
         <SidebarHeader />
         <Menu
-          style={{ marginTop: "25px" }}
+          style={{
+            marginTop: "25px",
+            marginBottom: "100px",
+          }}
           menuItemStyles={{
             button: ({ level, active, disabled, ...rest }) => {
               // only apply styles on first level elements of the tree

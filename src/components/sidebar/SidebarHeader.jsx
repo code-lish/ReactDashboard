@@ -5,7 +5,17 @@ const SidebarHeader = () => {
   const { collapsed } = useProSidebar();
   const theme = useTheme();
   return (
-    <Box mb="25px" mt="15px" ml="10px">
+    <Box
+      mb="25px"
+      mt="15px"
+      ml="10px"
+      sx={{
+        position: "sticky",
+        top: "0",
+        backgroundColor: theme.palette.bgColor[1000],
+        zIndex: "1",
+      }}
+    >
       <Box
         display="flex"
         flexDirection="row"

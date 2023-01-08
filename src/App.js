@@ -11,6 +11,7 @@ import { createTheme } from "@mui/material/styles";
 
 import { ToastContainer } from "react-toastify";
 import { themeSettings } from "./theme";
+import Contacts from "./pages/Contacts";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -23,7 +24,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
-
+            <Route path="/contacts" element={<Contacts />} />
             {/* Not found page */}
             <Route path="*" element={<NotFound />} />
           </Route>

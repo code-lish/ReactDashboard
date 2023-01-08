@@ -49,14 +49,22 @@ const LeftSidebar = () => {
     {
       title: "Contacts Information",
       to: "/contacts",
-      icon: <ContactsOutlined />,
+      icon: (
+        <ContactsOutlined
+          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+        />
+      ),
       selected,
       setSelected,
     },
     {
       title: "Invoices Balances",
       to: "/invoices",
-      icon: <ReceiptOutlined />,
+      icon: (
+        <ReceiptOutlined
+          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+        />
+      ),
       selected,
       setSelected,
     },

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { mockDataContacts } from "../data/mockData";
 import Header from "../components/Header";
-import { useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 
 const Contacts = () => {
   const theme = useTheme();

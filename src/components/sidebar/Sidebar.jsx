@@ -1,5 +1,5 @@
 import { Sidebar, Menu, useProSidebar } from "react-pro-sidebar";
-import { useTheme, Box } from "@mui/material";
+import { useTheme, Box, useMediaQuery } from "@mui/material";
 import {
   DashboardOutlined,
   MarkUnreadChatAltOutlined,
@@ -12,14 +12,24 @@ import {
   ContactsOutlined,
   ReceiptOutlined,
 } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
 import SidebarHeader from "./SidebarHeader";
 
 const LeftSidebar = () => {
+  const isNoneMobile = useMediaQuery("(min-width:900px)");
   const theme = useTheme();
   const [selected, setSelected] = useState("Dashboard");
-  const { collapsed } = useProSidebar();
+  const { collapsed, toggled, collapseSidebar, toggleSidebar } =
+    useProSidebar();
+
+  useEffect(() => {
+    !isNoneMobile && toggled
+      ? toggleSidebar(false)
+      : isNoneMobile && collapsed && collapseSidebar(false);
+    // eslint-disable-next-line
+  }, [isNoneMobile]);
+
   const sidebarItems = [
     {
       title: "Dashboard",
@@ -188,7 +198,7 @@ const LeftSidebar = () => {
             marginBottom: "100px",
           }}
           menuItemStyles={{
-            button: ({ level, active, disabled, ...rest }) => {
+            button: ({ level, active, disabled }) => {
               // only apply styles on first level elements of the tree
               if (level === 0)
                 return {

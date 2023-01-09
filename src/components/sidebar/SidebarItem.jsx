@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { MenuItem } from "react-pro-sidebar";
-import { Typography, useTheme } from "@mui/material";
+import { Typography, useTheme, Tooltip } from "@mui/material";
 import { useProSidebar } from "react-pro-sidebar";
 const SidebarItem = ({ item }) => {
   const theme = useTheme();
-  const { toggleSidebar } = useProSidebar();
+  const { toggleSidebar, toggled, collapsed } = useProSidebar();
 
   const onClick = () => {
     item?.setSelected(item?.title);
@@ -28,7 +28,31 @@ const SidebarItem = ({ item }) => {
       routerLink={<Link to={item?.to} />}
       active={item?.selected === item?.title}
       onClick={onClick}
-      icon={item?.icon}
+      icon={
+        toggled || collapsed ? (
+          <Tooltip
+            title={item?.title}
+            arrow
+            placement="left"
+            PopperProps={{
+              sx: {
+                "& .MuiTooltip-tooltip": {
+                  backgroundColor: theme.palette.grey[800],
+                  color: theme.palette.grey[200],
+                },
+                "& .MuiTooltip-arrow": {
+                  color: theme.palette.grey[800],
+                },
+                zIndex: 2334,
+              },
+            }}
+          >
+            {item?.icon}
+          </Tooltip>
+        ) : (
+          item.icon
+        )
+      }
     >
       {item?.title}
     </MenuItem>

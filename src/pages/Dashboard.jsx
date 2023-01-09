@@ -135,7 +135,7 @@ const Dashboard = () => {
         {/* Recent Transaction grid */}
         <Grid
           width="100%"
-          sx={12}
+          xs={12}
           md={4}
           alignSelf="start"
           className="scrollbar"

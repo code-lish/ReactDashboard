@@ -26,7 +26,19 @@ const lightTheme = {
     900: "#16152e",
     1000: "#6d67e4", // manually adjusted
   },
-
+  greenAccent: {
+    100: "#062111",
+    200: "#0c4322",
+    300: "#116434",
+    400: "#178645",
+    500: "#1da756",
+    600: "#4ab978",
+    700: "#77ca9a",
+    800: "#a5dcbb",
+    900: "#062c30", // manually adjusted
+    1000: "#05595b", // manually adjusted
+    1100: "#d2eddd",
+  },
   black: {
     100: "#cccccc",
     200: "#999999",
@@ -92,7 +104,19 @@ const darkTheme = {
     900: "#332c0a",
     1000: "#eef1ff", // manually adjusted
   },
-
+  greenAccent: {
+    100: "#d2eddd",
+    200: "#a5dcbb",
+    300: "#77ca9a",
+    400: "#4ab978",
+    500: "#1da756",
+    600: "#178645",
+    700: "#116434",
+    800: "#0c4322",
+    900: "#062111",
+    1000: "#05595b", // manually adjusted
+    1100: "#062c30", // manually adjusted
+  },
   black: {
     100: "#fcfcff",
     200: "#f8f9ff",
@@ -142,7 +166,10 @@ export const themeSettings = (mode) => {
               ...darkTheme.primary,
               main: darkTheme.primary[500],
             },
-
+            greenAccent: {
+              ...darkTheme.greenAccent,
+              main: darkTheme.greenAccent[500],
+            },
             black: {
               ...darkTheme.black,
               main: darkTheme.black[500],
@@ -169,6 +196,10 @@ export const themeSettings = (mode) => {
             primary: {
               ...lightTheme.primary,
               main: lightTheme.primary[500],
+            },
+            greenAccent: {
+              ...darkTheme.greenAccent,
+              main: darkTheme.greenAccent[500],
             },
             black: {
               ...lightTheme.black,

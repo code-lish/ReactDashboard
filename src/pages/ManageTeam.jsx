@@ -55,17 +55,20 @@ const ManageTeam = () => {
             justifyContent="space-between"
             backgroundColor={
               access === "admin"
-                ? theme.palette.success.main
+                ? theme.palette.greenAccent.main
                 : access === "manager"
-                ? theme.palette.success.light
-                : theme.palette.success.dark
+                ? theme.palette.greenAccent[1000]
+                : theme.palette.greenAccent[1100]
             }
             borderRadius="4px"
           >
             {access === "admin" && <AdminPanelSettingsOutlined />}
             {access === "manager" && <SecurityOutlined />}
             {access === "user" && <LockOpenOutlined />}
-            <Typography sx={{ ml: "5px" }} color={theme.palette.black[100]}>
+            <Typography
+              sx={{ ml: "5px" }}
+              color={theme.palette.greenAccent[100]}
+            >
               {access}
             </Typography>
           </Box>
@@ -74,7 +77,7 @@ const ManageTeam = () => {
     },
   ];
   const mobileColumns = [
-    { field: "id", headerName: "ID" },
+    { field: "id", flex: 0.5, headerName: "ID" },
     {
       field: "name",
       headerName: "Name",
@@ -89,27 +92,32 @@ const ManageTeam = () => {
     {
       field: "accessLevel",
       headerName: "Access Level",
-      flex: 1,
+      flex: 1.5,
       renderCell: ({ row: { access } }) => {
         return (
           <Box
-            width="100%"
-            p="5px"
+            width="90%"
+            // m="0 auto"
+            py="5px"
+            px="10px"
             display="flex"
             justifyContent="space-between"
             backgroundColor={
               access === "admin"
-                ? theme.palette.success.light
+                ? theme.palette.greenAccent.main
                 : access === "manager"
-                ? theme.palette.success.dark
-                : theme.palette.success.dark
+                ? theme.palette.greenAccent[1000]
+                : theme.palette.greenAccent[1100]
             }
             borderRadius="4px"
           >
             {access === "admin" && <AdminPanelSettingsOutlined />}
             {access === "manager" && <SecurityOutlined />}
             {access === "user" && <LockOpenOutlined />}
-            <Typography color={theme.palette.black[100]} sx={{ ml: "5px" }}>
+            <Typography
+              sx={{ ml: "5px" }}
+              color={theme.palette.greenAccent[100]}
+            >
               {access}
             </Typography>
           </Box>

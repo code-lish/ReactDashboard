@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { MenuItem } from "react-pro-sidebar";
+import { MenuItem, SubMenu } from "react-pro-sidebar";
 import { Typography, useTheme, Tooltip } from "@mui/material";
 import { useProSidebar } from "react-pro-sidebar";
+import SubMenuItem from "./SubMenuItem";
 const SidebarItem = ({ item }) => {
   const theme = useTheme();
   const { toggleSidebar, toggled, collapsed } = useProSidebar();
@@ -10,6 +11,16 @@ const SidebarItem = ({ item }) => {
     item?.setSelected(item?.title);
     toggleSidebar(false);
   };
+
+  if (item?.subMenuTitle) {
+    return (
+      <SubMenu label={item?.subMenuTitle} icon={item?.subMenuIcon}>
+        {item?.subMenuItems.map((item, _) => {
+          return <SubMenuItem item={item} key={_} />;
+        })}
+      </SubMenu>
+    );
+  }
 
   if (!item.to) {
     return (

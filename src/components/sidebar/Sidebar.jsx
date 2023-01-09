@@ -11,6 +11,7 @@ import {
   PeopleOutlined,
   ContactsOutlined,
   ReceiptOutlined,
+  MapOutlined,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
@@ -147,6 +148,49 @@ const LeftSidebar = () => {
       selected,
       setSelected,
     },
+    {
+      subMenuTitle: "Maps",
+      subMenuIcon: (
+        <MapOutlined
+          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+        />
+      ),
+      subMenuItems: [
+        {
+          title: "Manage Team",
+          to: "/manageteam",
+          icon: (
+            <PeopleOutlined
+              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+            />
+          ),
+          selected,
+          setSelected,
+        },
+        {
+          title: "Contacts Information",
+          to: "/contacts",
+          icon: (
+            <ContactsOutlined
+              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+            />
+          ),
+          selected,
+          setSelected,
+        },
+        {
+          title: "Invoices Balances",
+          to: "/invoices",
+          icon: (
+            <ReceiptOutlined
+              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+            />
+          ),
+          selected,
+          setSelected,
+        },
+      ],
+    },
   ];
 
   return (
@@ -193,6 +237,7 @@ const LeftSidebar = () => {
       >
         <SidebarHeader />
         <Menu
+          closeOnClick={true}
           style={{
             marginTop: "25px",
             marginBottom: "100px",
@@ -200,16 +245,15 @@ const LeftSidebar = () => {
           menuItemStyles={{
             button: ({ level, active, disabled }) => {
               // only apply styles on first level elements of the tree
-              if (level === 0)
-                return {
-                  color: disabled
-                    ? theme.palette.error.main
-                    : theme.palette.black.main,
-                  backgroundColor: active && theme.palette.light.main,
+              return {
+                color: disabled
+                  ? theme.palette.error.main
+                  : theme.palette.black.main,
+                backgroundColor: active && theme.palette.light.main,
 
-                  fontWeight: active && "bold",
-                  borderRadius: "100px",
-                };
+                fontWeight: active && "bold",
+                borderRadius: "100px",
+              };
             },
           }}
         >

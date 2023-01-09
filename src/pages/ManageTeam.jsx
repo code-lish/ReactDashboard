@@ -121,6 +121,7 @@ const ManageTeam = () => {
     <Box m="15px">
       <Header title="TEAM" subtitle="Managing the Team Members" />
       <Box
+        className="scrollbar"
         m="10px 0 0 0"
         height="73vh"
         sx={{

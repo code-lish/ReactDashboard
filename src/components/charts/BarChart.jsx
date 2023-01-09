@@ -36,6 +36,12 @@ const BarChart = ({ isDashboard = false, width, height }) => {
               fill: theme.palette.grey[900],
             },
           },
+          tooltip: {
+            container: {
+              color: theme.palette.primary.main,
+              background: theme.palette.light.main,
+            },
+          },
         }}
         keys={["hot dog", "burger", "sandwich", "kebab", "fries", "donut"]}
         indexBy="country"

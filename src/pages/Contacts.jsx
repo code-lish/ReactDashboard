@@ -80,6 +80,7 @@ const Contacts = () => {
         subtitle="List of Contacts for Future Reference"
       />
       <Box
+        className="scrollbar"
         m="10px 0 0 0"
         height="73vh"
         sx={{

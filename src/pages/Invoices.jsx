@@ -75,6 +75,7 @@ const Invoices = () => {
         subtitle="List of invoices for Future Reference"
       />
       <Box
+        className="scrollbar"
         m="10px 0 0 0"
         height="73vh"
         sx={{

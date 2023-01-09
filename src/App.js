@@ -14,6 +14,9 @@ import { themeSettings } from "./theme";
 import Contacts from "./pages/Contacts";
 import Invoices from "./pages/Invoices";
 import ManageTeam from "./pages/ManageTeam";
+import Line from "./pages/chartPages/Line";
+import Bar from "./pages/chartPages/Bar";
+import Pie from "./pages/chartPages/Pie";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -26,9 +29,16 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
-            <Route path="/contacts" element={<Contacts />} />
-            <Route path="/invoices" element={<Invoices />} />
-            <Route path="/manageteam" element={<ManageTeam />} />
+            {/* Data pages */}
+            <Route path="contacts" element={<Contacts />} />
+            <Route path="invoices" element={<Invoices />} />
+            <Route path="manageteam" element={<ManageTeam />} />
+
+            {/* charts pages */}
+            <Route path="line" element={<Line />} />
+            <Route path="bar" element={<Bar />} />
+            <Route path="pie" element={<Pie />} />
+
             {/* Not found page */}
             <Route path="*" element={<NotFound />} />
           </Route>

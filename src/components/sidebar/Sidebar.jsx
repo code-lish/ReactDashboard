@@ -34,7 +34,7 @@ const LeftSidebar = () => {
   const sidebarItems = [
     {
       title: "Dashboard",
-      to: "/",
+      to: "/dashboard",
       icon: (
         <DashboardOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -48,7 +48,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Manage Team",
-      to: "/manageteam",
+      to: "/dashboard/manageteam",
       icon: (
         <PeopleOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -59,7 +59,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Contacts Information",
-      to: "/contacts",
+      to: "/dashboard/contacts",
       icon: (
         <ContactsOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -70,7 +70,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Invoices Balances",
-      to: "/invoices",
+      to: "/dashboard/invoices",
       icon: (
         <ReceiptOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -81,7 +81,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Orders",
-      to: "/orders",
+      to: "/dashboard/orders",
       icon: (
         <MarkUnreadChatAltOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -92,7 +92,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Menus",
-      to: "/menu",
+      to: "/dashboard/menu",
       icon: (
         <RestaurantMenuOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -103,7 +103,7 @@ const LeftSidebar = () => {
     },
     {
       title: "Customers",
-      to: "/customers",
+      to: "/dashboard/customers",
       icon: (
         <PeopleAltOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -117,7 +117,7 @@ const LeftSidebar = () => {
     },
     {
       title: "BarChart",
-      to: "/bar",
+      to: "/dashboard/bar",
       icon: (
         <BarChartOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -128,7 +128,7 @@ const LeftSidebar = () => {
     },
     {
       title: "PieChart",
-      to: "/pie",
+      to: "/dashboard/pie",
       icon: (
         <PieChartOutlineOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -139,7 +139,7 @@ const LeftSidebar = () => {
     },
     {
       title: "LineChart",
-      to: "/line",
+      to: "/dashboard/line",
       icon: (
         <TimelineOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -158,7 +158,7 @@ const LeftSidebar = () => {
       subMenuItems: [
         {
           title: "Manage Team",
-          to: "/manageteam",
+          to: "/dashboard/manageteam",
           icon: (
             <PeopleOutlined
               sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -169,7 +169,7 @@ const LeftSidebar = () => {
         },
         {
           title: "Contacts Information",
-          to: "/contacts",
+          to: "/dashboard/contacts",
           icon: (
             <ContactsOutlined
               sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
@@ -180,7 +180,7 @@ const LeftSidebar = () => {
         },
         {
           title: "Invoices Balances",
-          to: "/invoices",
+          to: "/dashboard/invoices",
           icon: (
             <ReceiptOutlined
               sx={{ fontSize: "25px", color: theme.palette.black[1000] }}

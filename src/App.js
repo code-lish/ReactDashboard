@@ -17,6 +17,11 @@ import ManageTeam from "./pages/ManageTeam";
 import Line from "./pages/chartPages/Line";
 import Bar from "./pages/chartPages/Bar";
 import Pie from "./pages/chartPages/Pie";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import AuthLayout from "./components/layout/AuthLayout";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -27,8 +32,18 @@ function App() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-          <Route path="/" element={<Layout />}>
+          {/* Auth pages */}
+          <Route path="/" element={<AuthLayout />}>
+            <Route index element={<Login />} />
+            <Route path="register" element={<Register />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password" element={<ResetPassword />} />
+          </Route>
+
+          {/* Dashboard pages */}
+          <Route path="/dashboard" element={<Layout />}>
             <Route index element={<Dashboard />} />
+
             {/* Data pages */}
             <Route path="contacts" element={<Contacts />} />
             <Route path="invoices" element={<Invoices />} />
@@ -38,10 +53,9 @@ function App() {
             <Route path="line" element={<Line />} />
             <Route path="bar" element={<Bar />} />
             <Route path="pie" element={<Pie />} />
-
-            {/* Not found page */}
-            <Route path="*" element={<NotFound />} />
           </Route>
+          {/* Not found page */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <ToastContainer />
       </ThemeProvider>

@@ -21,6 +21,7 @@ import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AuthLayout from "./components/layout/AuthLayout";
+import Faq from "./pages/FAQ/Faq";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -46,6 +47,7 @@ function App() {
             <Route path="contacts" element={<Contacts />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="manageteam" element={<ManageTeam />} />
+            <Route path="faq" element={<Faq />} />
 
             {/* charts pages */}
             <Route path="line" element={<Line />} />

@@ -4,20 +4,9 @@ import {
   Typography,
   useTheme,
   TextField,
-  FormControl,
-  InputLabel,
-  InputAdornment,
-  IconButton,
   CircularProgress,
   Button,
-  FormControlLabel,
-  FormGroup,
-  Checkbox,
-  OutlinedInput,
-  FormHelperText,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import FlexBetween from "../../components/FlexBetween";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import React from "react";
@@ -29,12 +18,6 @@ const ForgotPassword = () => {
     handleSubmit,
   } = useForm();
   const onSubmit = (data) => console.log(data);
-
-  console.log(errors);
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const [loading, setLoading] = useState(false);
 
@@ -89,6 +72,13 @@ const ForgotPassword = () => {
               variant="outlined"
               error={errors.email ? true : false}
               helperText={errors.email && "This field is required"}
+              sx={{
+                "& .MuiFormLabel-root": {
+                  "&.Mui-focused": {
+                    color: theme.palette.grey[900],
+                  },
+                },
+              }}
             />
 
             <Box sx={{ position: "relative", mt: "20px" }}>
@@ -96,12 +86,12 @@ const ForgotPassword = () => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  color: theme.palette.grey[900],
-                  backgroundColor: theme.palette.light[400],
+                  color: theme.palette.light[100],
+                  backgroundColor: theme.palette.primary.main,
                   fontWeight: "bold",
                   boxShadow: "none",
                   "&:hover": {
-                    backgroundColor: theme.palette.light[400],
+                    backgroundColor: theme.palette.primary.main,
                   },
                 }}
                 disabled={loading}
@@ -124,7 +114,14 @@ const ForgotPassword = () => {
             </Box>
           </form>
         </Box>
-        <Button variant="contained" fullWidth sx={{ my: "10px" }}>
+        <Button
+          variant="outlined"
+          fullWidth
+          sx={{
+            my: "10px",
+            color: theme.palette.grey[900],
+          }}
+        >
           return to sign?
         </Button>
       </Box>

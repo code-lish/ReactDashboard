@@ -1,5 +1,5 @@
 import { Box, useTheme, Typography } from "@mui/material";
-import logo from "../../assets/img/logo.png";
+import logo from "../../assets/img/logo2.png";
 import { useProSidebar } from "react-pro-sidebar";
 const SidebarHeader = () => {
   const { collapsed } = useProSidebar();
@@ -19,13 +19,13 @@ const SidebarHeader = () => {
       <Box
         display="flex"
         flexDirection="row"
-        justifyContent="start"
-        alignItems="start"
+        justifyContent={!collapsed ? "start" : "center"}
+        alignItems="center"
       >
         <img
           alt="profile-user"
-          width="60px"
-          height="60px"
+          width="45px"
+          height="70px"
           src={logo}
           style={{ cursor: "pointer", borderRadius: "50%" }}
         />
@@ -36,14 +36,14 @@ const SidebarHeader = () => {
               color={theme.palette.grey[900]}
               fontWeight="bold"
             >
-              Salero
+              Rahanet
             </Typography>
             <Typography
               variant="body2"
               color={theme.palette.grey[800]}
               sx={{ whiteSpace: "nowrap" }}
             >
-              Resturant Dashboard
+              Management Dashboard
             </Typography>
           </Box>
         )}

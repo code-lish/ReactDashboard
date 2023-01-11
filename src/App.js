@@ -18,7 +18,6 @@ import Line from "./pages/chartPages/Line";
 import Bar from "./pages/chartPages/Bar";
 import Pie from "./pages/chartPages/Pie";
 import Login from "./pages/auth/Login";
-import Register from "./pages/auth/Register";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AuthLayout from "./components/layout/AuthLayout";
@@ -35,7 +34,6 @@ function App() {
           {/* Auth pages */}
           <Route path="/" element={<AuthLayout />}>
             <Route index element={<Login />} />
-            <Route path="register" element={<Register />} />
             <Route path="forgot-password" element={<ForgotPassword />} />
             <Route path="reset-password" element={<ResetPassword />} />
           </Route>

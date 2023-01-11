@@ -224,7 +224,7 @@ const LeftSidebar = () => {
           },
           ".ps-menu-button": {
             "&:hover": {
-              backgroundColor: theme.palette.light.main,
+              backgroundColor: theme.palette.light[400],
               color: theme.palette.primary[1000],
               fontWeight: "bold",
               borderRadius: "50px",
@@ -249,7 +249,7 @@ const LeftSidebar = () => {
                 color: disabled
                   ? theme.palette.error.main
                   : theme.palette.black.main,
-                backgroundColor: active && theme.palette.light.main,
+                backgroundColor: active && theme.palette.light[400],
 
                 fontWeight: active && "bold",
                 borderRadius: "100px",

@@ -16,17 +16,32 @@ import {
   Logout,
   ArrowDropDownOutlined,
 } from "@mui/icons-material";
-import profile from "../../../assets/img/profile.jpeg";
+import { useSelector } from "react-redux";
+import { useSendLogoutMutation } from "../../../features/auth/authApiSlice"
+import { useNavigate } from "react-router-dom";
+
 const Profile = () => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
+  const navigate = useNavigate()
+  const { userInfo } = useSelector(state => state.auth)
+  const [sendLogout, { }] = useSendLogoutMutation()
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const logoutHandler = () => {
+    sendLogout()
+    navigate('/')
+  }
+
   return (
     <>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -54,7 +69,7 @@ const Profile = () => {
             <Box
               component="img"
               alt="profile"
-              src={profile}
+              src={userInfo?.image}
               height="32px"
               width="32px"
               borderRadius="50%"
@@ -67,13 +82,13 @@ const Profile = () => {
                 fontSize="0.85rem"
                 sx={{ color: theme.palette.grey[900] }}
               >
-                {"Sara"}
+                {userInfo?.username}
               </Typography>
               <Typography
                 fontSize="0.75rem"
                 sx={{ color: theme.palette.grey[800] }}
               >
-                {"Manager"}
+                {userInfo?.superAdmin ? "SuperAdmin" : userInfo?.role}
               </Typography>
             </Box>
             <ArrowDropDownOutlined
@@ -136,7 +151,7 @@ const Profile = () => {
           </ListItemIcon>
           <Typography>Settings</Typography>
         </MenuItem>
-        <MenuItem>
+        <MenuItem onClick={logoutHandler}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

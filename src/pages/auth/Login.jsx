@@ -21,6 +21,7 @@ import FlexBetween from "../../components/FlexBetween";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import React from "react";
+import Cookies from 'js-cookie';
 import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next"
 import { yupResolver } from "@hookform/resolvers/yup"
@@ -30,21 +31,13 @@ import usePersist from '../../hooks/UsePersist'
 import LoginSchema from "../../utils/validationSchema/LoginSchema"
 import { useLoginMutation } from "../../features/auth/authApiSlice";
 import { toast } from 'react-toastify'
+import Meta from '../../components/common/Meta'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const theme = useTheme()
   const [persist, setPersist] = usePersist()
-  const { userInfo } = useSelector(state => state.auth)
-
-  useEffect(() => {
-    if (localStorage.getItem('admin_token'))
-
-      return <Navigate to='/dashboard' />
-
-    console.log(localStorage.getItem('admin_token'));
-  }, []);
 
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -95,151 +88,154 @@ const Login = () => {
   }
 
   return (
-    <Container
-      maxWidth="sm"
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-      }}
-    >
-      <Box
+    <>
+      <Meta title="Login | Rahanet Dashboard" />
+
+      <Container
+        maxWidth="sm"
         sx={{
-          backgroundColor: theme.palette.bgColor[1000],
-          width: "70%",
-          overflow: "hidden",
-          filter: "drop-shadow(0px 2px 5px rgba(0,0,0,0.32))",
-          borderRadius: "5px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
         }}
       >
-        <Typography
-          variant="h4"
-          textAlign="center"
-          p={2}
+        <Box
           sx={{
-            color: theme.palette.grey[900],
-            fontWeight: "bold",
+            backgroundColor: theme.palette.bgColor[1000],
+            width: "70%",
+            overflow: "hidden",
+            filter: "drop-shadow(0px 2px 5px rgba(0,0,0,0.32))",
+            borderRadius: "5px",
           }}
         >
-          Sign In Rahanet
-        </Typography>
-        <Typography
-          variant="h5"
-          textAlign="left"
-          px="20px"
-          sx={{
-            color: theme.palette.grey[900],
-          }}
-        >
-          Welcome to Rahanet management system
-        </Typography>
-        <Box noValidate autoComplete="off" sx={{ p: "20px" }}>
-          <form onSubmit={handleSubmit(onSubmitHandler)}>
-            <TextField
-              {...register("emailUsername", { required: true })}
-              fullWidth
-              id="emailUsername"
-              label="Email or Username"
-              variant="outlined"
-              error={errors.emailUsername ? true : false}
-              helperText={errors.emailUsername?.message}
-              sx={{
-                "& .MuiFormLabel-root": {
-                  "&.Mui-focused": {
-                    color: theme.palette.grey[900],
-                  },
-                },
-              }}
-            />
-
-            <FormControl
-              error={errors.password ? true : false}
-              variant="outlined"
-              fullWidth
-              sx={{
-                mt: "20px",
-                ".MuiFormLabel-root": {
-                  "&.Mui-focused": {
-                    color: theme.palette.grey[900],
-                  },
-                },
-              }}
-            >
-              <InputLabel htmlFor="password">Password</InputLabel>
-              <OutlinedInput
-                {...register("password", { required: true })}
-                type={showPassword ? "text" : "password"}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                }
-                label="Password"
-              />
-              <FormHelperText>
-                {errors.password?.message}
-              </FormHelperText>
-            </FormControl>
-            <FlexBetween>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label="Keep me logged in"
-                  sx={{ color: theme.palette.grey[900] }}
-                  onChange={handleToggle}
-                  checked={persist}
-                />
-              </FormGroup>
-              <Button
-                variant="text"
-                size="small"
-                sx={{ color: theme.palette.grey[900] }}
-              >
-                Forgot Password?
-              </Button>
-            </FlexBetween>
-            <Box sx={{ position: "relative", mt: "20px" }}>
-              <Button
-                type="submit"
-                variant="contained"
+          <Typography
+            variant="h4"
+            textAlign="center"
+            p={2}
+            sx={{
+              color: theme.palette.grey[900],
+              fontWeight: "bold",
+            }}
+          >
+            Sign In Rahanet
+          </Typography>
+          <Typography
+            variant="h5"
+            textAlign="left"
+            px="20px"
+            sx={{
+              color: theme.palette.grey[900],
+            }}
+          >
+            Welcome to Rahanet management system
+          </Typography>
+          <Box noValidate autoComplete="off" sx={{ p: "20px" }}>
+            <form onSubmit={handleSubmit(onSubmitHandler)}>
+              <TextField
+                {...register("emailUsername", { required: true })}
+                fullWidth
+                id="emailUsername"
+                label="Email"
+                variant="outlined"
+                error={errors.emailUsername ? true : false}
+                helperText={errors.emailUsername?.message}
                 sx={{
-                  color: theme.palette.light[100],
-                  backgroundColor: theme.palette.primary.main,
-                  fontWeight: "bold",
-                  boxShadow: "none",
-                  "&:hover": {
-                    backgroundColor: theme.palette.primary[400],
+                  "& .MuiFormLabel-root": {
+                    "&.Mui-focused": {
+                      color: theme.palette.grey[900],
+                    },
                   },
                 }}
-                disabled={isLoading}
+              />
+
+              <FormControl
+                error={errors.password ? true : false}
+                variant="outlined"
                 fullWidth
+                sx={{
+                  mt: "20px",
+                  ".MuiFormLabel-root": {
+                    "&.Mui-focused": {
+                      color: theme.palette.grey[900],
+                    },
+                  },
+                }}
               >
-                Login
-              </Button>
-              {isLoading && (
-                <CircularProgress
-                  size={24}
-                  sx={{
-                    color: theme.palette.greenAccent[500],
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%,-50%) !important",
-                  }}
+                <InputLabel htmlFor="password">Password</InputLabel>
+                <OutlinedInput
+                  {...register("password", { required: true })}
+                  type={showPassword ? "text" : "password"}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
                 />
-              )}
-            </Box>
-          </form>
+                <FormHelperText>
+                  {errors.password?.message}
+                </FormHelperText>
+              </FormControl>
+              <FlexBetween>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox />}
+                    label="Keep me logged in"
+                    sx={{ color: theme.palette.grey[900] }}
+                    onChange={handleToggle}
+                    checked={persist}
+                  />
+                </FormGroup>
+                <Button
+                  variant="text"
+                  size="small"
+                  sx={{ color: theme.palette.grey[900] }}
+                >
+                  Forgot Password?
+                </Button>
+              </FlexBetween>
+              <Box sx={{ position: "relative", mt: "20px" }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    color: theme.palette.light[100],
+                    backgroundColor: theme.palette.primary.main,
+                    fontWeight: "bold",
+                    boxShadow: "none",
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary[400],
+                    },
+                  }}
+                  disabled={isLoading}
+                  fullWidth
+                >  Login
+                  {isLoading && (
+                    <CircularProgress
+                      size={24}
+                      sx={{
+                        color: theme.palette.primary[400],
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%,-50%) !important",
+                      }}
+                    />
+                  )}
+                </Button>
+              </Box>
+            </form>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 

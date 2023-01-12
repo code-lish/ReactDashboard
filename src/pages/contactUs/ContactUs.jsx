@@ -3,6 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import ContactUsMenu from "./ContactUsMenu";
+import Meta from "../../components/common/Meta";
 
 const ContactUs = () => {
   const theme = useTheme();
@@ -192,48 +193,53 @@ const ContactUs = () => {
       status: null,
     },
   ];
-  return (
-    <Box m="15px">
-      <Header title="Contact Us" subtitle="Contact with out team" />
-      <Box
-        className="scrollbar"
-        m="10px 0 0 0"
-        height="73vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "none",
-          },
 
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: theme.palette.light[400],
-            borderBottom: "none",
-          },
-          "& .MuiDataGrid-virtualScroller": {
-            backgroundColor: theme.palette.bgColor[1000],
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "none",
-            backgroundColor: theme.palette.light[400],
-          },
-          "& .MuiCheckbox-root": {
-            color: `${theme.palette.grey[800]} !important`,
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: `${theme.palette.grey[900]} !important`,
-          },
-        }}
-      >
-        <DataGrid
-          pageSize={pageSize}
-          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-          rowsPerPageOptions={[5, 10, 20]}
-          getRowHeight={() => "auto"}
-          pagination
-          rows={data}
-          columns={desktopColumns}
-        />
+  return (
+    <>
+      <Meta title="Contact-Us | Rahanet Dashboard" />
+
+      <Box m="15px">
+        <Header title="Contact Us" subtitle="Contact with out team" />
+        <Box
+          className="scrollbar"
+          m="10px 0 0 0"
+          height="73vh"
+          sx={{
+            "& .MuiDataGrid-root": {
+              border: "none",
+            },
+
+            "& .MuiDataGrid-columnHeaders": {
+              backgroundColor: theme.palette.light[400],
+              borderBottom: "none",
+            },
+            "& .MuiDataGrid-virtualScroller": {
+              backgroundColor: theme.palette.bgColor[1000],
+            },
+            "& .MuiDataGrid-footerContainer": {
+              borderTop: "none",
+              backgroundColor: theme.palette.light[400],
+            },
+            "& .MuiCheckbox-root": {
+              color: `${theme.palette.grey[800]} !important`,
+            },
+            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+              color: `${theme.palette.grey[900]} !important`,
+            },
+          }}
+        >
+          <DataGrid
+            pageSize={pageSize}
+            onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+            rowsPerPageOptions={[5, 10, 20]}
+            getRowHeight={() => "auto"}
+            pagination
+            rows={data}
+            columns={desktopColumns}
+          />
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 };
 

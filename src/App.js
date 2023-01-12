@@ -22,6 +22,7 @@ import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
 import AuthLayout from "./components/layout/AuthLayout";
 import Faq from "./pages/FAQ/Faq";
+import ContactUs from "./pages/contactUs/ContactUs";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -48,6 +49,7 @@ function App() {
             <Route path="invoices" element={<Invoices />} />
             <Route path="manageteam" element={<ManageTeam />} />
             <Route path="faq" element={<Faq />} />
+            <Route path="contact-us" element={<ContactUs />} />
 
             {/* charts pages */}
             <Route path="line" element={<Line />} />

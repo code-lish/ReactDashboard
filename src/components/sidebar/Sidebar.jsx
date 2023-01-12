@@ -40,6 +40,9 @@ const LeftSidebar = () => {
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
+      onClick: () => {
+        console.log("Dashboard is click");
+      },
       selected,
       setSelected,
     },
@@ -120,8 +123,8 @@ const LeftSidebar = () => {
       setSelected,
     },
     {
-      title: "Support",
-      to: "/dashboard/support",
+      title: "Contact Us",
+      to: "/dashboard/contact-us",
       icon: (
         <RestaurantMenuOutlined
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}

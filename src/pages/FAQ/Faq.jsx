@@ -1,13 +1,7 @@
 import { useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { mockDataTeam } from "../../data/mockData";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery, Typography } from "@mui/material";
-import {
-  AdminPanelSettingsOutlined,
-  LockOpenOutlined,
-  SecurityOutlined,
-} from "@mui/icons-material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import FaqMenu from "./FaqMenu";
 
 const FAQ = () => {
@@ -37,56 +31,6 @@ const FAQ = () => {
       },
     },
   ];
-  // const mobileColumns = [
-  //   { field: "id", flex: 0.5, headerName: "ID" },
-  //   {
-  //     field: "name",
-  //     headerName: "Name",
-  //     flex: 1,
-  //     cellClassName: "name-column--cell",
-  //   },
-  //   {
-  //     field: "phone",
-  //     headerName: "Phone Number",
-  //     flex: 1,
-  //   },
-  //   {
-  //     field: "accessLevel",
-  //     headerName: "Access Level",
-  //     flex: 1.5,
-  //     renderCell: ({ row: { access } }) => {
-  //       return (
-  //         <Box
-  //           width="90%"
-  //           // m="0 auto"
-  //           py="5px"
-  //           px="10px"
-  //           display="flex"
-  //           justifyContent="space-between"
-  //           backgroundColor={
-  //             access === "admin"
-  //               ? theme.palette.greenAccent.main
-  //               : access === "manager"
-  //               ? theme.palette.greenAccent[1000]
-  //               : theme.palette.greenAccent[1100]
-  //           }
-  //           borderRadius="4px"
-  //         >
-  //           {access === "admin" && <AdminPanelSettingsOutlined />}
-  //           {access === "manager" && <SecurityOutlined />}
-  //           {access === "user" && <LockOpenOutlined />}
-  //           <Typography
-  //             sx={{ ml: "5px" }}
-  //             color={theme.palette.greenAccent[100]}
-  //           >
-  //             {access}
-  //           </Typography>
-  //         </Box>
-  //       );
-  //     },
-  //   },
-  // ];
-
   const data = [
     {
       id: 1,

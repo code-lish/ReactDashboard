@@ -10,6 +10,8 @@ const SidebarItem = ({ item }) => {
   const onClick = () => {
     item?.setSelected(item?.title);
     toggleSidebar(false);
+
+    item?.onClick();
   };
 
   if (item?.subMenuTitle) {

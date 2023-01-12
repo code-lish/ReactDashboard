@@ -21,20 +21,69 @@ import FlexBetween from "../../components/FlexBetween";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import React from "react";
-const Login = () => {
-  const theme = useTheme();
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm();
-  const onSubmit = (data) => console.log(data);
+import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from "react-i18next"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { useDispatch, useSelector } from 'react-redux'
+import { setCredentials } from '../../features/auth/authSlice'
+import usePersist from '../../hooks/UsePersist'
+import LoginSchema from "../../utils/validationSchema/LoginSchema"
+import { useLoginMutation } from "../../features/auth/authApiSlice";
+import { toast } from 'react-toastify'
 
+const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const theme = useTheme()
+  const [persist, setPersist] = usePersist()
 
-  const [loading, setLoading] = useState(false);
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(LoginSchema),
+  })
+
+  const [login, { isLoading }] = useLoginMutation()
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+  const handleToggle = () => setPersist(prev => !prev)
+
+  const onSubmitHandler = async (data) => {
+    try {
+      const userData = await login(data).unwrap()
+      dispatch(setCredentials({ userData }))
+      navigate('/dashboard')
+      reset()
+
+    } catch (rejectResp) {
+      const { data } = rejectResp
+
+      if (data?.errors) {
+        data.errors.forEach(error => setError(error["param"], { type: "manual", message: error["msg"] }))
+      } else {
+        toast.error(data?.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+
+      }
+    }
+  }
 
   return (
     <Container
@@ -77,15 +126,15 @@ const Login = () => {
           Welcome to Rahanet management system
         </Typography>
         <Box noValidate autoComplete="off" sx={{ p: "20px" }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmitHandler)}>
             <TextField
-              {...register("username", { required: true })}
+              {...register("emailUsername", { required: true })}
               fullWidth
-              id="username"
-              label="UserName"
+              id="emailUsername"
+              label="Email or Username"
               variant="outlined"
-              error={errors.username ? true : false}
-              helperText={errors.username && "This field is required"}
+              error={errors.emailUsername ? true : false}
+              helperText={errors.emailUsername?.message}
               sx={{
                 "& .MuiFormLabel-root": {
                   "&.Mui-focused": {
@@ -126,7 +175,7 @@ const Login = () => {
                 label="Password"
               />
               <FormHelperText>
-                {errors.password && "This field is required"}
+                {errors.password?.message}
               </FormHelperText>
             </FormControl>
             <FlexBetween>
@@ -135,6 +184,8 @@ const Login = () => {
                   control={<Checkbox />}
                   label="Keep me logged in"
                   sx={{ color: theme.palette.grey[900] }}
+                  onChange={handleToggle}
+                  checked={persist}
                 />
               </FormGroup>
               <Button
@@ -158,12 +209,12 @@ const Login = () => {
                     backgroundColor: theme.palette.primary[400],
                   },
                 }}
-                disabled={loading}
+                disabled={isLoading}
                 fullWidth
               >
                 Login
               </Button>
-              {loading && (
+              {isLoading && (
                 <CircularProgress
                   size={24}
                   sx={{

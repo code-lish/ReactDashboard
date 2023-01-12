@@ -1,66 +1,47 @@
-import { Routes, Route } from "react-router-dom";
+import React, { lazy } from "react"
 import Layout from "../src/components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./components/NotFound";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Outlet,
+  Route,
+  RouterProvider,
+  Navigate,
+} from "react-router-dom"
+import PersistLogin from "./features/auth/PersistLogin"
 
-import { useSelector } from "react-redux";
-import { selectTheme } from "./features/global/globalSlice";
+const AppProvider = lazy(() => import("./components/layout/AppProvider"))
 
-import { ThemeProvider, CssBaseline } from "@mui/material";
-import { createTheme } from "@mui/material/styles";
+const Login = lazy(() => import("./pages/auth/Login"))
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"))
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"))
 
-import { ToastContainer } from "react-toastify";
-import { themeSettings } from "./theme";
-import Contacts from "./pages/Contacts";
-import Invoices from "./pages/Invoices";
-import ManageTeam from "./pages/ManageTeam";
-import Line from "./pages/chartPages/Line";
-import Bar from "./pages/chartPages/Bar";
-import Pie from "./pages/chartPages/Pie";
-import Login from "./pages/auth/Login";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from "./pages/auth/ResetPassword";
-import AuthLayout from "./components/layout/AuthLayout";
-import Faq from "./pages/FAQ/Faq";
+const Faq = lazy(() => import("./pages/FAQ/Faq"))
 
-function App() {
-  const mode = useSelector(selectTheme);
-  const theme = createTheme(themeSettings(mode));
+const App = () => {
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<AppProvider />}>
+        <Route index element={<Login />} />
 
-  return (
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Routes>
-          {/* Auth pages */}
-          <Route path="/" element={<AuthLayout />}>
-            <Route index element={<Login />} />
-            <Route path="forgot-password" element={<ForgotPassword />} />
-            <Route path="reset-password" element={<ResetPassword />} />
-          </Route>
+        <Route path="auth">
+          <Route path="forgot-password" element={<ForgotPassword />} />
+          <Route path="reset-password" element={<ResetPassword />} />
+        </Route>
 
-          {/* Dashboard pages */}
-          <Route path="/dashboard" element={<Layout />}>
-            <Route index element={<Dashboard />} />
+        <Route path="/dashboard" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="faq" element={<Faq />} />
+        </Route>
 
-            {/* Data pages */}
-            <Route path="contacts" element={<Contacts />} />
-            <Route path="invoices" element={<Invoices />} />
-            <Route path="manageteam" element={<ManageTeam />} />
-            <Route path="faq" element={<Faq />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    )
+  )
 
-            {/* charts pages */}
-            <Route path="line" element={<Line />} />
-            <Route path="bar" element={<Bar />} />
-            <Route path="pie" element={<Pie />} />
-          </Route>
-          {/* Not found page */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ToastContainer />
-      </ThemeProvider>
-    </>
-  );
+  return <RouterProvider router={router} />
 }
 
 export default App;

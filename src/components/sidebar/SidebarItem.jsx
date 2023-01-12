@@ -14,7 +14,34 @@ const SidebarItem = ({ item }) => {
 
   if (item?.subMenuTitle) {
     return (
-      <SubMenu label={item?.subMenuTitle} icon={item?.subMenuIcon}>
+      <SubMenu
+        label={item?.subMenuTitle}
+        icon={
+          toggled || collapsed ? (
+            <Tooltip
+              title={item?.subMenuTitle}
+              arrow
+              placement="left"
+              PopperProps={{
+                sx: {
+                  "& .MuiTooltip-tooltip": {
+                    backgroundColor: theme.palette.grey[800],
+                    color: theme.palette.grey[200],
+                  },
+                  "& .MuiTooltip-arrow": {
+                    color: theme.palette.grey[800],
+                  },
+                  zIndex: 2334,
+                },
+              }}
+            >
+              {item?.subMenuIcon}
+            </Tooltip>
+          ) : (
+            item?.subMenuIcon
+          )
+        }
+      >
         {item?.subMenuItems.map((item, _) => {
           return <SubMenuItem item={item} key={_} />;
         })}

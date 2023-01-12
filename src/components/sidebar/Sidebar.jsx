@@ -37,76 +37,116 @@ const LeftSidebar = () => {
       to: "/dashboard",
       icon: (
         <DashboardOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Data",
-    },
-    {
-      title: "Manage Team",
-      to: "/dashboard/manageteam",
+      title: "Blogs",
+      to: "/dashboard/blogs",
       icon: (
         <PeopleOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Contacts Information",
-      to: "/dashboard/contacts",
+      title: "Services",
+      to: "/dashboard/services",
       icon: (
         <ContactsOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Invoices Balances",
-      to: "/dashboard/invoices",
+      subMenuTitle: "Requests",
+      subMenuIcon: (
+        <MapOutlined
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+        />
+      ),
+      subMenuItems: [
+        {
+          title: "Job Business",
+          to: "/dashboard/job-business",
+          icon: (
+            <PeopleOutlined
+              sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+            />
+          ),
+          selected,
+          setSelected,
+        },
+        {
+          title: "Package Services",
+          to: "/dashboard/package-services",
+          icon: (
+            <ContactsOutlined
+              sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+            />
+          ),
+          selected,
+          setSelected,
+        },
+      ],
+    },
+    {
+      title: "Users",
+      to: "/dashboard/users",
       icon: (
         <ReceiptOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Orders",
-      to: "/dashboard/orders",
+      title: "FAQ",
+      to: "/dashboard/faq",
       icon: (
         <MarkUnreadChatAltOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Menus",
-      to: "/dashboard/menu",
+      title: "Support",
+      to: "/dashboard/support",
       icon: (
         <RestaurantMenuOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
       setSelected,
     },
     {
-      title: "Customers",
-      to: "/dashboard/customers",
+      title: "Chat",
+      to: "/dashboard/chat",
       icon: (
         <PeopleAltOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+        />
+      ),
+      selected,
+      setSelected,
+    },
+    {
+      title: "Settings",
+      to: "/dashboard/settings",
+      icon: (
+        <PeopleAltOutlined
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
       selected,
@@ -148,49 +188,6 @@ const LeftSidebar = () => {
       selected,
       setSelected,
     },
-    {
-      subMenuTitle: "Maps",
-      subMenuIcon: (
-        <MapOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-        />
-      ),
-      subMenuItems: [
-        {
-          title: "Manage Team",
-          to: "/dashboard/manageteam",
-          icon: (
-            <PeopleOutlined
-              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-            />
-          ),
-          selected,
-          setSelected,
-        },
-        {
-          title: "Contacts Information",
-          to: "/dashboard/contacts",
-          icon: (
-            <ContactsOutlined
-              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-            />
-          ),
-          selected,
-          setSelected,
-        },
-        {
-          title: "Invoices Balances",
-          to: "/dashboard/invoices",
-          icon: (
-            <ReceiptOutlined
-              sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-            />
-          ),
-          selected,
-          setSelected,
-        },
-      ],
-    },
   ];
 
   return (
@@ -213,6 +210,9 @@ const LeftSidebar = () => {
         breakPoint="md"
         backgroundColor={theme.palette.bgColor[1000]}
         rootStyles={{
+          ".ps-submenu-content": {
+            backgroundColor: theme.palette.bgColor[1000],
+          },
           ".ps-menuitem-root": {
             padding: collapsed ? "5px 4px" : "5px 20px 5px 10px",
           },

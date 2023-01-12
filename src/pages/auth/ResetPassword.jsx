@@ -10,20 +10,22 @@ import {
   IconButton,
   CircularProgress,
   Button,
-  FormControlLabel,
-  FormGroup,
-  Checkbox,
   OutlinedInput,
   FormHelperText,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import FlexBetween from "../../components/FlexBetween";
+import logo from "../../assets/img/logo2.png";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import React from "react";
 import VerificationInput from "react-verification-input";
 const ResetPassword = () => {
   const theme = useTheme();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
   const {
     register,
     formState: { errors },
@@ -41,13 +43,13 @@ const ResetPassword = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        my: "10px",
       }}
     >
       <Box
         sx={{
           backgroundColor: theme.palette.bgColor[1000],
-          width: "70%",
+          width: "80%",
           overflow: "hidden",
           filter: "drop-shadow(0px 2px 5px rgba(0,0,0,0.32))",
           borderRadius: "5px",
@@ -74,12 +76,41 @@ const ResetPassword = () => {
         >
           Enter the code that you recive on your mobile
         </Typography>
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          my="20px"
+        >
+          <img src={logo} alt="logo" height="130px" />
+          <Typography variant="h4" mt="10px">
+            Verify-otp
+          </Typography>
+        </Box>
         <Box noValidate autoComplete="off" sx={{ p: "20px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Box display="flex" alignItems="center" justifyContent="center">
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              sx={{
+                ".character--inactive": {
+                  backgroundColor: theme.palette.bgColor[800],
+                  borderRadius: "5px",
+                },
+                ".character--selected": {
+                  backgroundColor: theme.palette.primary[100],
+                  borderRadius: "5px",
+                },
+                ".character": {
+                  borderRadius: "5px",
+                },
+              }}
+            >
               <VerificationInput
                 classNames={{
-                  container: "container",
+                  container: "varification-container",
                   character: "character",
                   characterInactive: "character--inactive",
                   characterSelected: "character--selected",
@@ -90,19 +121,85 @@ const ResetPassword = () => {
                 autoFocus={true}
                 onChange={onChange}
               />
+              <Typography alignSelf="start" mt="10px" sx={{ mt: "15px" }}>
+                Did not recived any token{" "}
+                <Typography
+                  sx={{
+                    color: theme.palette.primary.main,
+                    display: "inline",
+                    textDecoration: "underline",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Resend
+                </Typography>
+              </Typography>
             </Box>
+
+            <FormControl
+              error={errors.password ? true : false}
+              variant="outlined"
+              fullWidth
+              sx={{
+                mt: "20px",
+                ".MuiFormLabel-root": {
+                  "&.Mui-focused": {
+                    color: theme.palette.grey[900],
+                  },
+                },
+              }}
+            >
+              <InputLabel htmlFor="password">New password</InputLabel>
+              <OutlinedInput
+                {...register("password", { required: true })}
+                type={showPassword ? "text" : "password"}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                label="New password"
+              />
+              <FormHelperText>
+                {errors.password && "This field is required"}
+              </FormHelperText>
+            </FormControl>
+            <TextField
+              {...register("confirmPassword", { required: true })}
+              fullWidth
+              id="confirmPassword"
+              label="ConfirmPassword"
+              variant="outlined"
+              type="password"
+              error={errors.confirmPassword ? true : false}
+              helperText={errors.confirmPassword && "This field is required"}
+              sx={{
+                mt: "10px",
+                "& .MuiFormLabel-root": {
+                  "&.Mui-focused": {
+                    color: theme.palette.grey[900],
+                  },
+                },
+              }}
+            />
 
             <Box sx={{ position: "relative", mt: "20px" }}>
               <Button
                 type="submit"
                 variant="contained"
                 sx={{
-                  color: theme.palette.grey[900],
-                  backgroundColor: theme.palette.light[400],
+                  color: theme.palette.light[100],
+                  backgroundColor: theme.palette.primary.main,
                   fontWeight: "bold",
                   boxShadow: "none",
                   "&:hover": {
-                    backgroundColor: theme.palette.light[400],
+                    backgroundColor: theme.palette.primary.main,
                   },
                 }}
                 disabled={loading}

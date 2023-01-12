@@ -30,8 +30,6 @@ const Login = () => {
   } = useForm();
   const onSubmit = (data) => console.log(data);
 
-  console.log(errors);
-
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -88,13 +86,27 @@ const Login = () => {
               variant="outlined"
               error={errors.username ? true : false}
               helperText={errors.username && "This field is required"}
+              sx={{
+                "& .MuiFormLabel-root": {
+                  "&.Mui-focused": {
+                    color: theme.palette.grey[900],
+                  },
+                },
+              }}
             />
 
             <FormControl
               error={errors.password ? true : false}
               variant="outlined"
               fullWidth
-              sx={{ mt: "20px" }}
+              sx={{
+                mt: "20px",
+                ".MuiFormLabel-root": {
+                  "&.Mui-focused": {
+                    color: theme.palette.grey[900],
+                  },
+                },
+              }}
             >
               <InputLabel htmlFor="password">Password</InputLabel>
               <OutlinedInput
@@ -122,13 +134,13 @@ const Login = () => {
                 <FormControlLabel
                   control={<Checkbox />}
                   label="Keep me logged in"
-                  sx={{ color: theme.palette.grey[800] }}
+                  sx={{ color: theme.palette.grey[900] }}
                 />
               </FormGroup>
               <Button
                 variant="text"
                 size="small"
-                sx={{ color: theme.palette.grey[800] }}
+                sx={{ color: theme.palette.grey[900] }}
               >
                 Forgot Password?
               </Button>
@@ -138,12 +150,12 @@ const Login = () => {
                 type="submit"
                 variant="contained"
                 sx={{
-                  color: theme.palette.grey[900],
-                  backgroundColor: theme.palette.light[400],
+                  color: theme.palette.light[100],
+                  backgroundColor: theme.palette.primary.main,
                   fontWeight: "bold",
                   boxShadow: "none",
                   "&:hover": {
-                    backgroundColor: theme.palette.light[400],
+                    backgroundColor: theme.palette.primary[400],
                   },
                 }}
                 disabled={loading}

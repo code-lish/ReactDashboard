@@ -3,15 +3,20 @@ import { useTheme, Box, useMediaQuery } from "@mui/material";
 import {
   DashboardOutlined,
   MarkUnreadChatAltOutlined,
-  RestaurantMenuOutlined,
-  PeopleAltOutlined,
   BarChartOutlined,
   PieChartOutlineOutlined,
   TimelineOutlined,
   PeopleOutlined,
   ContactsOutlined,
-  ReceiptOutlined,
   MapOutlined,
+  BookOnlineOutlined,
+  Settings,
+  QuestionAnswer,
+  ContactSupport,
+  AddBoxOutlined,
+  BusinessSharp,
+  SurfingSharp
+
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
@@ -40,6 +45,20 @@ const LeftSidebar = () => {
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
+      onClick: () => {
+        console.log("Dashboard is click");
+      },
+      selected,
+      setSelected,
+    },
+    {
+      title: "Users",
+      to: "/dashboard/users",
+      icon: (
+        <PeopleOutlined
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+        />
+      ),
       selected,
       setSelected,
     },
@@ -47,7 +66,29 @@ const LeftSidebar = () => {
       title: "Blogs",
       to: "/dashboard/blogs",
       icon: (
-        <PeopleOutlined
+        <BookOnlineOutlined
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+        />
+      ),
+      selected,
+      setSelected,
+    },
+    {
+      title: "Chat",
+      to: "/dashboard/chat",
+      icon: (
+        <MarkUnreadChatAltOutlined
+          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+        />
+      ),
+      selected,
+      setSelected,
+    },
+    {
+      title: "Packages",
+      to: "/dashboard/packages",
+      icon: (
+        <AddBoxOutlined
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
@@ -77,7 +118,7 @@ const LeftSidebar = () => {
           title: "Job Business",
           to: "/dashboard/job-business",
           icon: (
-            <PeopleOutlined
+            <SurfingSharp
               sx={{ fontSize: "25px", color: theme.palette.primary.main }}
             />
           ),
@@ -88,7 +129,7 @@ const LeftSidebar = () => {
           title: "Package Services",
           to: "/dashboard/package-services",
           icon: (
-            <ContactsOutlined
+            <BusinessSharp
               sx={{ fontSize: "25px", color: theme.palette.primary.main }}
             />
           ),
@@ -98,10 +139,10 @@ const LeftSidebar = () => {
       ],
     },
     {
-      title: "Users",
-      to: "/dashboard/users",
+      title: "Contact Us",
+      to: "/dashboard/contact-us",
       icon: (
-        <ReceiptOutlined
+        <ContactSupport
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
@@ -112,29 +153,7 @@ const LeftSidebar = () => {
       title: "FAQ",
       to: "/dashboard/faq",
       icon: (
-        <MarkUnreadChatAltOutlined
-          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
-    {
-      title: "Support",
-      to: "/dashboard/support",
-      icon: (
-        <RestaurantMenuOutlined
-          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
-    {
-      title: "Chat",
-      to: "/dashboard/chat",
-      icon: (
-        <PeopleAltOutlined
+        <QuestionAnswer
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
@@ -145,7 +164,7 @@ const LeftSidebar = () => {
       title: "Settings",
       to: "/dashboard/settings",
       icon: (
-        <PeopleAltOutlined
+        <Settings
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),

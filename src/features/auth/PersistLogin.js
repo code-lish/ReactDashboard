@@ -58,11 +58,11 @@ const PersistLogin = () => {
     } else if (isError) {
         //persist: yes, token: no 
         content = (
-            <p className='errmsg'>
-                {`${error?.data?.message} - `}
-                <Link to="/auth/login">Please login again</Link>.
-            </p>
-            // <Navigate to='/auth/login' />
+            // <p className='errmsg'>
+            //     {`${error?.data?.message} - `}
+            //     <Link to="/">Please login again</Link>.
+            // </p>
+            <Navigate to='/' />
         )
     } else if (isSuccess && trueSuccess) {
         //persist: yes, token: yes 

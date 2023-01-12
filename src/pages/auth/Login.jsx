@@ -19,9 +19,9 @@ import {
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import React from "react";
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, Navigate } from 'react-router-dom'
 import { useTranslation } from "react-i18next"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,6 +36,15 @@ const Login = () => {
 
   const theme = useTheme()
   const [persist, setPersist] = usePersist()
+  const { userInfo } = useSelector(state => state.auth)
+
+  useEffect(() => {
+    if (localStorage.getItem('admin_token'))
+
+      return <Navigate to='/dashboard' />
+
+    console.log(localStorage.getItem('admin_token'));
+  }, []);
 
   const { t } = useTranslation()
   const navigate = useNavigate()

@@ -11,7 +11,7 @@ import { Typography } from "@mui/material";
 
 const ITEM_HEIGHT = 48;
 
-const FaqMenu = () => {
+const ContactUsMenu = () => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -79,4 +79,4 @@ const FaqMenu = () => {
   );
 };
 
-export default FaqMenu;
+export default ContactUsMenu;

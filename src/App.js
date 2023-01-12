@@ -12,6 +12,7 @@ import {
 } from "react-router-dom"
 import PersistLogin from "./features/auth/PersistLogin"
 
+const Prefetch = lazy(() => import("./features/auth/PreFetch"))
 const AppProvider = lazy(() => import("./components/layout/AppProvider"))
 
 const Login = lazy(() => import("./pages/auth/Login"))
@@ -19,6 +20,7 @@ const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"))
 const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"))
 
 const Faq = lazy(() => import("./pages/FAQ/Faq"))
+const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"))
 
 const App = () => {
   const router = createBrowserRouter(
@@ -31,12 +33,18 @@ const App = () => {
           <Route path="reset-password" element={<ResetPassword />} />
         </Route>
 
-        <Route path="/dashboard" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="faq" element={<Faq />} />
-        </Route>
+        <Route element={<PersistLogin />}>
+          <Route element={<Prefetch />}>
 
-        <Route path="*" element={<NotFound />} />
+            <Route path="/dashboard" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="faq" element={<Faq />} />
+              <Route path="contact-us" element={<ContactUS />} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Route>
       </Route>
     )
   )

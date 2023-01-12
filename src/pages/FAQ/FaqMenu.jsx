@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { IconButton, Menu, MenuItem, Box, useTheme } from "@mui/material";
 import {
   MoreVert,
   LanguageOutlined,
@@ -8,24 +8,11 @@ import {
 } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { Typography } from "@mui/material";
-const options = [
-  {
-    title: "Language",
-    icon: <LanguageOutlined />,
-  },
-  {
-    title: "Edit",
-    icon: <ModeEditOutlined />,
-  },
-  {
-    title: "Delete",
-    icon: <DeleteOutlined />,
-  },
-];
 
 const ITEM_HEIGHT = 48;
 
 const FaqMenu = () => {
+  const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -36,11 +23,11 @@ const FaqMenu = () => {
   };
 
   return (
-    <div>
+    <Box>
       <IconButton
         aria-label="more"
         id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
+        aria-controls={open ? "faq-menu" : undefined}
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleClick}
@@ -48,7 +35,7 @@ const FaqMenu = () => {
         <MoreVert />
       </IconButton>
       <Menu
-        id="long-menu"
+        id="faq-menu"
         MenuListProps={{
           "aria-labelledby": "long-button",
         }}
@@ -61,17 +48,34 @@ const FaqMenu = () => {
             width: "20ch",
           },
         }}
+        sx={{
+          "& .MuiPaper-root": {
+            backgroundColor: theme.palette.bgColor.main,
+          },
+        }}
       >
-        {options.map((option) => (
-          <MenuItem key={option} onClick={handleClose}>
-            <FlexBetween>
-              <Typography>{option.icon}</Typography>
-              <Typography sx={{ ml: "5px" }}>{option.title}</Typography>
-            </FlexBetween>
-          </MenuItem>
-        ))}
+        <MenuItem onClick={handleClose}>
+          <FlexBetween>
+            <LanguageOutlined />
+            <Typography sx={{ ml: "5px" }}>Language</Typography>
+          </FlexBetween>
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          <FlexBetween>
+            <ModeEditOutlined />
+            <Typography sx={{ ml: "5px" }}>Edit</Typography>
+          </FlexBetween>
+        </MenuItem>
+
+        <MenuItem onClick={handleClose}>
+          <FlexBetween>
+            <DeleteOutlined />
+            <Typography sx={{ ml: "5px" }}>Delete</Typography>
+          </FlexBetween>
+        </MenuItem>
       </Menu>
-    </div>
+    </Box>
   );
 };
 

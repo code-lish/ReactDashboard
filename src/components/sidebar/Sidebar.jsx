@@ -11,7 +11,7 @@ import {
   MapOutlined,
   BookOnlineOutlined,
   Settings,
-  QuestionAnswer,
+  ContactEmergencyRounded,
   ContactSupport,
   AddBoxOutlined,
   BusinessSharp,
@@ -138,7 +138,7 @@ const LeftSidebar = () => {
       title: "Contact Us",
       to: "/dashboard/contact-us",
       icon: (
-        <ContactSupport
+        <ContactEmergencyRounded
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
@@ -149,7 +149,7 @@ const LeftSidebar = () => {
       title: "FAQ",
       to: "/dashboard/faq",
       icon: (
-        <QuestionAnswer
+        <ContactSupport
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),

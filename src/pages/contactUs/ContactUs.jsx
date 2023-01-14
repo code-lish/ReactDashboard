@@ -1,18 +1,9 @@
 import { useState, useMemo } from "react";
-import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
+import { DataGrid } from "@mui/x-data-grid";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery, Tooltip, Button } from "@mui/material";
+import { Box, useTheme, useMediaQuery } from "@mui/material";
 import Meta from "../../components/common/Meta";
-import { useGetFaqsQuery } from "../../features/faq/faqApiSlice";
-import { selectAllFaqs } from "../../features/faq/faqApiSlice";
 import { useSelector } from "react-redux";
-import {
-  LanguageOutlined,
-  ModeEditOutlined,
-  DeleteOutlined,
-  ReadMoreOutlined,
-  BookOnlineOutlined
-} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { selectAllContacts, useGetContactsQuery } from "../../features/contact/contactApiSlice";
 import ContactUsMenu from './ContactUsMenu'

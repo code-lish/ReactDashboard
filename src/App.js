@@ -22,6 +22,7 @@ const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 
 const Faq = lazy(() => import("./pages/FAQ/Faq"));
 const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
+const PackageService = lazy(() => import("./pages/packageService/PackageService"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -41,6 +42,7 @@ const App = () => {
               <Route path="faq" element={<Faq />} />
               <Route path="faq/:id" element={<SingleFaq />} />
               <Route path="contact-us" element={<ContactUS />} />
+              <Route path="package-services" element={<PackageService />} />
             </Route>
           </Route>
         </Route>

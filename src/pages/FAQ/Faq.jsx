@@ -1,76 +1,168 @@
-import { useState } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { useState, useMemo } from "react";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
-import FaqMenu from "./FaqMenu";
+import { Box, useTheme, useMediaQuery, Tooltip } from "@mui/material";
 import Meta from "../../components/common/Meta";
-
+import { useGetFaqsQuery } from "../../features/faq/faqApiSlice";
+import { selectAllFaqs } from "../../features/faq/faqApiSlice";
+import { useSelector } from "react-redux";
+import {
+  LanguageOutlined,
+  ModeEditOutlined,
+  DeleteOutlined,
+  ReadMoreOutlined,
+} from "@mui/icons-material";
+import EditFaq from "./EditFaq";
+import { useNavigate } from "react-router-dom";
 const FAQ = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const isNoneMobile = useMediaQuery("(min-width:900px)");
+  const [showModal, setShowModal] = useState(false);
+  const [singleFaqId, setSinglFaqId] = useState(null);
 
+  const { isLoading, isSuccess, isError, error } = useGetFaqsQuery();
+
+  const faqs = useSelector(selectAllFaqs);
   const [pageSize, setPageSize] = useState(5);
 
-  const desktopColumns = [
-    { field: "question", headerName: "Question", flex: 1 },
-    {
-      field: "answer",
-      headerName: "Answer",
-      flex: 1,
-    },
-    {
-      field: "classification",
-      headerName: "Classification",
-      flex: 0.5,
-    },
-    {
-      field: "actions",
-      headerName: "Actions",
-      flex: 0.3,
-      renderCell: () => {
-        return <FaqMenu />;
+  const columns = useMemo(
+    () => [
+      {
+        field: "question",
+        valueFormatter: ({ value }) => {
+          return value?.en || value?.fa || value?.ps;
+        },
+
+        headerName: "Question",
+        flex: 1,
+        type: "string",
       },
-    },
-  ];
-  const data = [
-    {
-      id: 1,
-      question:
-        "thissfkladjlkjdslakfjdlakjfldksajflkdsjaflkdsjaf;lkmnaoiewrhjajfdslkaj;dflksjd",
-      answer:
-        "thissfkladjlkjdslakfjdlakjfldksajflkdsjaflkdsjaf;lkmnaoiewrhjajfdslkaj;dflksjd",
-      classification: "jonsnow@gmail.com",
-      actions: null,
-    },
-    {
-      id: 2,
-      question: 2,
-      answer: "Jon Snow",
-      classification: "jonsnow@gmail.com",
-      actions: null,
-    },
-    {
-      id: 3,
-      question: 3,
-      answer: "Jon Snow",
-      classification: "jonsnow@gmail.com",
-      actions: null,
-    },
-    {
-      id: 4,
-      question: 4,
-      answer: "Jon Snow",
-      classification: "jonsnow@gmail.com",
-      actions: null,
-    },
-  ];
+      {
+        field: "answer",
+        headerName: "Answer",
+        valueFormatter: ({ value }) => {
+          return value?.en || value?.fa || value?.ps;
+        },
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "category",
+        headerName: "Category",
+        flex: 0.5,
+      },
+      {
+        field: "actions",
+        headerName: "Actions",
+        type: "actions",
+        flex: 0.5,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Change language"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <LanguageOutlined />
+              </Tooltip>
+            }
+            label="Language"
+            onClick={() => console.log("Language clicked")}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Delete"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <DeleteOutlined
+                  sx={{
+                    color: theme.palette.error.main,
+                  }}
+                />
+              </Tooltip>
+            }
+            label="Delete"
+            onClick={() => console.log("delete clicked")}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Edit"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <ModeEditOutlined />
+              </Tooltip>
+            }
+            label="Edit"
+            onClick={() => handleEditFaq(params.id)}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Read More"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <ReadMoreOutlined />
+              </Tooltip>
+            }
+            label="Read More"
+            onClick={() => navigate(`/dashboard/faq/${params.id}`)}
+          />,
+        ],
+      },
+    ],
+    [theme]
+  );
+
+  const handleEditFaq = (id) => {
+    setShowModal(true);
+    setSinglFaqId(id);
+  };
 
   return (
     <>
+      <EditFaq
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={singleFaqId}
+      />
       <Meta title="FAQ | Rahanet Dashboard" />
 
       <Box m="15px">
-        <Header title="Frequently Asked Questions" subtitle="Ask you question" />
+        <Header
+          title="Frequently Asked Questions"
+          subtitle="Ask you question"
+        />
         <Box
           className="scrollbar"
           m="10px 0 0 0"
@@ -104,8 +196,8 @@ const FAQ = () => {
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 10, 20]}
             pagination
-            rows={data}
-            columns={desktopColumns}
+            rows={faqs}
+            columns={columns}
           />
         </Box>
       </Box>

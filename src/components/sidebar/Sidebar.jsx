@@ -15,8 +15,7 @@ import {
   ContactSupport,
   AddBoxOutlined,
   BusinessSharp,
-  SurfingSharp
-
+  SurfingSharp,
 } from "@mui/icons-material";
 import { useState, useEffect } from "react";
 import SidebarItem from "./SidebarItem";
@@ -45,9 +44,6 @@ const LeftSidebar = () => {
           sx={{ fontSize: "25px", color: theme.palette.primary.main }}
         />
       ),
-      onClick: () => {
-        console.log("Dashboard is click");
-      },
       selected,
       setSelected,
     },

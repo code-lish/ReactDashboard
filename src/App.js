@@ -1,4 +1,4 @@
-import React, { lazy } from "react"
+import React, { lazy } from "react";
 import Layout from "../src/components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./components/NotFound";
@@ -9,18 +9,19 @@ import {
   Route,
   RouterProvider,
   Navigate,
-} from "react-router-dom"
-import PersistLogin from "./features/auth/PersistLogin"
+} from "react-router-dom";
+import PersistLogin from "./features/auth/PersistLogin";
+import SingleFaq from "./pages/FAQ/SingleFaq";
 
-const Prefetch = lazy(() => import("./features/auth/PreFetch"))
-const AppProvider = lazy(() => import("./components/layout/AppProvider"))
+const Prefetch = lazy(() => import("./features/auth/PreFetch"));
+const AppProvider = lazy(() => import("./components/layout/AppProvider"));
 
-const Login = lazy(() => import("./pages/auth/Login"))
-const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"))
-const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"))
+const Login = lazy(() => import("./pages/auth/Login"));
+const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
+const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 
-const Faq = lazy(() => import("./pages/FAQ/Faq"))
-const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"))
+const Faq = lazy(() => import("./pages/FAQ/Faq"));
+const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -35,10 +36,10 @@ const App = () => {
 
         <Route element={<PersistLogin />}>
           <Route element={<Prefetch />}>
-
             <Route path="/dashboard" element={<Layout />}>
               <Route index element={<Dashboard />} />
               <Route path="faq" element={<Faq />} />
+              <Route path="faq/:id" element={<SingleFaq />} />
               <Route path="contact-us" element={<ContactUS />} />
             </Route>
           </Route>
@@ -47,9 +48,9 @@ const App = () => {
         <Route path="*" element={<NotFound />} />
       </Route>
     )
-  )
+  );
 
-  return <RouterProvider router={router} />
-}
+  return <RouterProvider router={router} />;
+};
 
 export default App;

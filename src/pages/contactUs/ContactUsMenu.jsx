@@ -8,17 +8,29 @@ import {
 } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
 import { Typography } from "@mui/material";
+import { useChangeStatusMutation } from "../../features/contact/contactApiSlice";
 
 const ITEM_HEIGHT = 48;
 
-const ContactUsMenu = () => {
+const ContactUsMenu = ({ id }) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const [changeStatus, { isLoading, isSuccess, isError, error }] =
+    useChangeStatusMutation();
+
+  const changeContactStatus = async (e) => {
+    const status = e.currentTarget.getAttribute('data-status')
+    await changeStatus({ id, status })
     setAnchorEl(null);
   };
 
@@ -54,26 +66,20 @@ const ContactUsMenu = () => {
           },
         }}
       >
-        <MenuItem onClick={handleClose}>
+        <MenuItem data-status="Pending" onClick={changeContactStatus}>
           <FlexBetween>
             <LanguageOutlined />
-            <Typography sx={{ ml: "5px" }}>Language</Typography>
+            <Typography sx={{ ml: "5px" }}>Pending</Typography>
           </FlexBetween>
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
+        <MenuItem data-status="fulfilled" onClick={changeContactStatus}>
           <FlexBetween>
             <ModeEditOutlined />
-            <Typography sx={{ ml: "5px" }}>Edit</Typography>
+            <Typography sx={{ ml: "5px" }}>fulfilled</Typography>
           </FlexBetween>
         </MenuItem>
 
-        <MenuItem onClick={handleClose}>
-          <FlexBetween>
-            <DeleteOutlined />
-            <Typography sx={{ ml: "5px" }}>Delete</Typography>
-          </FlexBetween>
-        </MenuItem>
       </Menu>
     </Box>
   );

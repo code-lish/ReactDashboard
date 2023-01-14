@@ -69,21 +69,34 @@ export const faqApiSlice = apiSlice.injectEndpoints({
         return [{ type: "Faq", id: "LIST" }];
       },
     }),
-    // addNewNote: builder.mutation({
-    //     query: initialNote => ({
-    //         url: '/notes',
-    //         method: 'POST',
-    //         body: {
-    //             ...initialNote,
-    //         }
-    //     }),
-    //     invalidatesTags: [
-    //         { type: 'Note', id: "LIST" }
-    //     ]
-    // }),
+    addFaq: builder.mutation({
+      query: payload => ({
+        url: '/admin/faq',
+        method: 'POST',
+        body: {
+          ...payload,
+        }
+      }),
+      invalidatesTags: [
+        { type: 'Faq', id: "LIST" }
+      ]
+    }),
     updateFaq: builder.mutation({
+      query: ({ id, ...faq }) => {
+        console.log(faq, { faq }, { ...faq });
+        return {
+          url: `/admin/faq/${id}`,
+          method: "PUT",
+          body: {
+            ...faq,
+          },
+        }
+      },
+      invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
+    }),
+    updateLocalFaq: builder.mutation({
       query: ({ id, ...faq }) => ({
-        url: `/admin/faq/${id}`,
+        url: `/admin/faq/${id}/update-locals`,
         method: "PUT",
         body: {
           ...faq,
@@ -91,25 +104,25 @@ export const faqApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
     }),
-    // deleteNote: builder.mutation({
-    //     query: ({ id }) => ({
-    //         url: `/notes`,
-    //         method: 'DELETE',
-    //         body: { id }
-    //     }),
-    //     invalidatesTags: (result, error, arg) => [
-    //         { type: 'Note', id: arg.id }
-    //     ]
-    // }),
+    deleteFaq: builder.mutation({
+      query: (id) => ({
+        url: `/admin/faq/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: 'Faq', id: arg.id }
+      ]
+    }),
   }),
 });
 
 export const {
   useGetFaqsQuery,
   useGetSingleFaqQuery,
-  // useAddNewNoteMutation,
+  useAddFaqMutation,
   useUpdateFaqMutation,
-  // useDeleteNoteMutation,
+  useUpdateLocalFaqMutation,
+  useDeleteFaqMutation,
 } = faqApiSlice;
 
 // returns the query result object

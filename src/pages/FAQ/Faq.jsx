@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
 import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery, Tooltip } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Tooltip, Button } from "@mui/material";
 import Meta from "../../components/common/Meta";
-import { useGetFaqsQuery } from "../../features/faq/faqApiSlice";
+import { useDeleteFaqMutation, useGetFaqsQuery } from "../../features/faq/faqApiSlice";
 import { selectAllFaqs } from "../../features/faq/faqApiSlice";
 import { useSelector } from "react-redux";
 import {
@@ -11,9 +11,17 @@ import {
   ModeEditOutlined,
   DeleteOutlined,
   ReadMoreOutlined,
+  BookOnlineOutlined
 } from "@mui/icons-material";
 import EditFaq from "./EditFaq";
 import { useNavigate } from "react-router-dom";
+import CreateFaq from "./CreateFaq";
+import LocalFaq from './LocalFaq'
+import Swal from "sweetalert2"
+import withReactContent from "sweetalert2-react-content"
+
+const MySwal = withReactContent(Swal)
+
 const FAQ = () => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -24,7 +32,45 @@ const FAQ = () => {
   const { isLoading, isSuccess, isError, error } = useGetFaqsQuery();
 
   const faqs = useSelector(selectAllFaqs);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(11);
+
+
+  const handleEditFaq = (id) => {
+    setShowModal('edit');
+    setSinglFaqId(id);
+  };
+
+  const handleCreateFaq = (id) => {
+    setShowModal('create');
+  };
+
+  const handleLocalFaq = (id) => {
+    setShowModal('local');
+    setSinglFaqId(id);
+  };
+
+  const [
+    deleteFaq,
+    { isSuccess: isDelSuccess, isError: isDelError, error: delerror },
+  ] = useDeleteFaqMutation()
+
+  const deleteHandler = async (id) => {
+    MySwal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteFaq(id)
+
+        MySwal.fire("Deleted!", "Your file has been deleted.", "success")
+      }
+    })
+  }
 
   const columns = useMemo(
     () => [
@@ -46,11 +92,6 @@ const FAQ = () => {
         },
         flex: 1,
         type: "string",
-      },
-      {
-        field: "category",
-        headerName: "Category",
-        flex: 0.5,
       },
       {
         field: "actions",
@@ -75,7 +116,7 @@ const FAQ = () => {
               </Tooltip>
             }
             label="Language"
-            onClick={() => console.log("Language clicked")}
+            onClick={() => handleLocalFaq(params.id)}
           />,
           <GridActionsCellItem
             icon={
@@ -98,7 +139,7 @@ const FAQ = () => {
               </Tooltip>
             }
             label="Delete"
-            onClick={() => console.log("delete clicked")}
+            onClick={() => deleteHandler(params.id)}
           />,
           <GridActionsCellItem
             icon={
@@ -144,14 +185,18 @@ const FAQ = () => {
     [theme]
   );
 
-  const handleEditFaq = (id) => {
-    setShowModal(true);
-    setSinglFaqId(id);
-  };
-
   return (
     <>
       <EditFaq
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={singleFaqId}
+      />
+      <CreateFaq
+        showModal={showModal}
+        setShowModal={setShowModal}
+      />
+      <LocalFaq
         showModal={showModal}
         setShowModal={setShowModal}
         id={singleFaqId}
@@ -163,6 +208,7 @@ const FAQ = () => {
           title="Frequently Asked Questions"
           subtitle="Ask you question"
         />
+        <Button onClick={() => handleCreateFaq()}>Create FAQ</Button>
         <Box
           className="scrollbar"
           m="10px 0 0 0"

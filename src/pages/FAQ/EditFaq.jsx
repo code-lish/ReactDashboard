@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   TextField,
@@ -15,27 +15,48 @@ const EditFaq = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
   const faq = useSelector((state) => selectFaqById(state, id));
 
-  const [qusetion, setQuestion] = useState(
-    faq?.question?.fa || faq?.question?.ps || faq?.question?.en
+  const [question, setQuestion] = useState(
+    ''
   );
   const [answer, setAnswer] = useState(
-    faq?.answer?.fa || faq?.answer?.ps || faq?.answer?.en
+    ''
   );
+
+  const [updateFaq, { isLoading, isSuccess, isError, error }] =
+    useUpdateFaqMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setQuestion('')
+      setAnswer('')
+    }
+
+    if (faq) {
+      setQuestion(faq?.question?.fa)
+      setAnswer(faq?.answer?.fa)
+    }
+
+  }, [isSuccess, faq])
 
   const handleClose = () => {
     setShowModal(false);
   };
 
-  const [updateFaq, { isLoading, isSuccess, isError, error }] =
-    useUpdateFaqMutation();
-
   const onSubmit = async (e) => {
-    await updateFaq({ id, qusetion, answer });
+    e.preventDefault()
+    // if (question.trim() && answer.trim()) {
+    await updateFaq({
+      id,
+      question: question === undefined ? faq?.question?.fa : question,
+      answer: answer === undefined ? faq?.answer?.fa : answer
+    });
+    setShowModal(false)
+    // }
   };
 
   return (
     <div>
-      <Dialog open={showModal} onClose={handleClose} fullWidth>
+      <Dialog open={showModal === 'edit'} onClose={handleClose} fullWidth>
         <DialogTitle
           sx={{
             backgroundColor: theme.palette.bgColor[500],
@@ -79,7 +100,7 @@ const EditFaq = ({ showModal, setShowModal, id }) => {
           >
             Cancel
           </Button>
-          <Button onClick={onSubmit} sx={{ color: theme.palette.primary[500] }}>
+          <Button type="submit" onClick={onSubmit} sx={{ color: theme.palette.primary[500] }}>
             Submit
           </Button>
         </DialogActions>

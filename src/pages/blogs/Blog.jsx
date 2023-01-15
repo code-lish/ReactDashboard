@@ -6,6 +6,7 @@ import Meta from "../../components/common/Meta";
 import {
   selectAllBlogs,
   useGetBlogsQuery,
+  useDeleteBlogMutation,
 } from "../../features/blog/blogApiSlice";
 import { useSelector } from "react-redux";
 import {
@@ -15,12 +16,14 @@ import {
   ReadMoreOutlined,
   BookOnlineOutlined,
 } from "@mui/icons-material";
-// import EditFaq from "./EditFaq";
 import { useNavigate } from "react-router-dom";
 // import CreateFaq from "./CreateFaq";
 // import LocalFaq from "./LocalFaq";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+import EditBlog from "./EditBlog";
+import FlexBetween from "../../components/FlexBetween";
+import CreateBlog from "./CreateBlog";
 
 const MySwal = withReactContent(Swal);
 
@@ -29,170 +32,219 @@ const Blog = () => {
   const navigate = useNavigate();
   const isNoneMobile = useMediaQuery("(min-width:900px)");
   const [showModal, setShowModal] = useState(false);
-  const [singleFaqId, setSinglFaqId] = useState(null);
+  const [singleBlogId, setSinglBlogId] = useState(null);
 
   const { isLoading, isSuccess, isError, error } = useGetBlogsQuery();
   const blogs = useSelector(selectAllBlogs);
   const [pageSize, setPageSize] = useState(10);
-  console.log(blogs);
-  // const handleEditFaq = (id) => {
-  //   setShowModal("edit");
-  //   setSinglFaqId(id);
-  // };
 
-  // const handleCreateFaq = (id) => {
-  //   setShowModal("create");
-  // };
+  const handleEditBlog = (id) => {
+    setShowModal("edit");
+    setSinglBlogId(id);
+  };
 
-  // const handleLocalFaq = (id) => {
-  //   setShowModal("local");
-  //   setSinglFaqId(id);
-  // };
+  const handleCreateBlog = () => {
+    setShowModal("create");
+  };
 
-  // const [
-  //   deleteFaq,
-  //   { isSuccess: isDelSuccess, isError: isDelError, error: delerror },
-  // ] = useDeleteFaqMutation();
+  const handleLocalFaq = (id) => {
+    // setShowModal("local");
+    // setSinglFaqId(id);
+  };
 
-  // const deleteHandler = async (id) => {
-  //   MySwal.fire({
-  //     title: "Are you sure?",
-  //     text: "You won't be able to revert this!",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Yes, delete it!",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       await deleteFaq(id);
+  const [
+    deleteBlog,
+    { isSuccess: isDelSuccess, isError: isDelError, error: delerror },
+  ] = useDeleteBlogMutation();
 
-  //       MySwal.fire("Deleted!", "Your file has been deleted.", "success");
-  //     }
-  //   });
-  // };
+  const deleteHandler = async (id) => {
+    MySwal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteBlog(id);
 
-  // const columns = useMemo(
-  //   () => [
-  //     {
-  //       field: "question",
-  //       valueFormatter: ({ value }) => {
-  //         return value?.en || value?.fa || value?.ps;
-  //       },
+        MySwal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
 
-  //       headerName: "Question",
-  //       flex: 1,
-  //       type: "string",
-  //     },
-  //     {
-  //       field: "answer",
-  //       headerName: "Answer",
-  //       valueFormatter: ({ value }) => {
-  //         return value?.en || value?.fa || value?.ps;
-  //       },
-  //       flex: 1,
-  //       type: "string",
-  //     },
-  //     {
-  //       field: "actions",
-  //       headerName: "Actions",
-  //       type: "actions",
-  //       flex: 0.5,
-  //       getActions: (params) => [
-  //         <GridActionsCellItem
-  //           icon={
-  //             <Tooltip
-  //               title="Change language"
-  //               PopperProps={{
-  //                 sx: {
-  //                   "& .MuiTooltip-tooltip": {
-  //                     backgroundColor: theme.palette.grey[800],
-  //                     color: theme.palette.grey[200],
-  //                   },
-  //                 },
-  //               }}
-  //             >
-  //               <LanguageOutlined />
-  //             </Tooltip>
-  //           }
-  //           label="Language"
-  //           onClick={() => handleLocalFaq(params.id)}
-  //         />,
-  //         <GridActionsCellItem
-  //           icon={
-  //             <Tooltip
-  //               title="Delete"
-  //               PopperProps={{
-  //                 sx: {
-  //                   "& .MuiTooltip-tooltip": {
-  //                     backgroundColor: theme.palette.grey[800],
-  //                     color: theme.palette.grey[200],
-  //                   },
-  //                 },
-  //               }}
-  //             >
-  //               <DeleteOutlined
-  //                 sx={{
-  //                   color: theme.palette.error.main,
-  //                 }}
-  //               />
-  //             </Tooltip>
-  //           }
-  //           label="Delete"
-  //           onClick={() => deleteHandler(params.id)}
-  //         />,
-  //         <GridActionsCellItem
-  //           icon={
-  //             <Tooltip
-  //               title="Edit"
-  //               PopperProps={{
-  //                 sx: {
-  //                   "& .MuiTooltip-tooltip": {
-  //                     backgroundColor: theme.palette.grey[800],
-  //                     color: theme.palette.grey[200],
-  //                   },
-  //                 },
-  //               }}
-  //             >
-  //               <ModeEditOutlined />
-  //             </Tooltip>
-  //           }
-  //           label="Edit"
-  //           onClick={() => handleEditFaq(params.id)}
-  //         />,
-  //         <GridActionsCellItem
-  //           icon={
-  //             <Tooltip
-  //               title="Read More"
-  //               PopperProps={{
-  //                 sx: {
-  //                   "& .MuiTooltip-tooltip": {
-  //                     backgroundColor: theme.palette.grey[800],
-  //                     color: theme.palette.grey[200],
-  //                   },
-  //                 },
-  //               }}
-  //             >
-  //               <ReadMoreOutlined />
-  //             </Tooltip>
-  //           }
-  //           label="Read More"
-  //           onClick={() => navigate(`/dashboard/faq/${params.id}`)}
-  //         />,
-  //       ],
-  //     },
-  //   ],
-  //   [theme]
-  // );
+  const columns = useMemo(
+    () => [
+      {
+        field: "title",
+        headerName: "Title",
+        valueFormatter: ({ value }) => {
+          return value?.fa;
+        },
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "content",
+        headerName: "Content",
+        valueFormatter: ({ value }) => {
+          return value?.fa;
+        },
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "slug",
+        headerName: "Slug",
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "excerpt",
+        valueFormatter: ({ value }) => {
+          return value?.fa;
+        },
+        headerName: "Excerpt",
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "comments",
+        headerName: "Comments",
+        valueFormatter: ({ value }) => {
+          return value?.length;
+        },
+        flex: 0.5,
+        type: "string",
+      },
+      {
+        field: "author",
+        valueFormatter: ({ value }) => {
+          return value?.fullName;
+        },
+
+        headerName: "Name",
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "createdAt",
+        valueFormatter: ({ value }) => {
+          const date = new Date(value);
+          return date.toDateString();
+        },
+        headerName: "Created At",
+        flex: 1,
+        type: "string",
+      },
+      {
+        field: "status",
+        headerName: "Status",
+        flex: 0.5,
+        type: "string",
+      },
+      {
+        field: "actions",
+        headerName: "Actions",
+        type: "actions",
+        flex: 1.2,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Change language"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <LanguageOutlined />
+              </Tooltip>
+            }
+            label="Language"
+            onClick={() => console.log("handle local lang")}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Delete"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <DeleteOutlined
+                  sx={{
+                    color: theme.palette.error.main,
+                  }}
+                />
+              </Tooltip>
+            }
+            label="Delete"
+            onClick={() => deleteHandler(params.id)}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Edit"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <ModeEditOutlined />
+              </Tooltip>
+            }
+            label="Edit"
+            onClick={() => handleEditBlog(params.id)}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Read More"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <ReadMoreOutlined />
+              </Tooltip>
+            }
+            label="Read More"
+            onClick={() => navigate(`/dashboard/blogs/${params.id}`)}
+          />,
+        ],
+      },
+    ],
+    [theme]
+  );
 
   return (
     <>
-      {/* <EditFaq
+      <EditBlog
         showModal={showModal}
         setShowModal={setShowModal}
-        id={singleFaqId}
-      /> */}
-      {/* <CreateFaq showModal={showModal} setShowModal={setShowModal} /> */}
+        id={singleBlogId}
+      />
+      <CreateBlog showModal={showModal} setShowModal={setShowModal} />
       {/* <LocalFaq
         showModal={showModal}
         setShowModal={setShowModal}
@@ -201,8 +253,12 @@ const Blog = () => {
       <Meta title="Blog | Rahanet Dashboard" />
 
       <Box m="15px">
-        <Header title="Blog" subtitle="Blog" />
-        {/* <Button onClick={() => handleCreateFaq()}>Create FAQ</Button> */}
+        <FlexBetween>
+          <Header title="Blog" subtitle="Blog" />
+          <Button variant="contained" onClick={() => handleCreateBlog()}>
+            Create Blog
+          </Button>
+        </FlexBetween>
         <Box
           className="scrollbar"
           m="10px 0 0 0"
@@ -231,14 +287,14 @@ const Blog = () => {
             },
           }}
         >
-          {/* <DataGrid
+          <DataGrid
             pageSize={pageSize}
             onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
             rowsPerPageOptions={[5, 10, 20]}
             pagination
-            rows={faqs}
+            rows={blogs}
             columns={columns}
-          /> */}
+          />
         </Box>
       </Box>
     </>

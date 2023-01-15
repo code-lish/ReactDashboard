@@ -33,7 +33,6 @@ export const blogApiSlice = apiSlice.injectEndpoints({
         } else return [{ type: "Blog", id: "LIST" }];
       },
     }),
-    // getSingleFaq: builder.query({
     //   query: (id) => ({
     //     url: `/admin/faq/${id}`,
     //     validateStatus: (response, result) => {
@@ -68,31 +67,28 @@ export const blogApiSlice = apiSlice.injectEndpoints({
     //     return [{ type: "Faq", id: "LIST" }];
     //   },
     // }),
-    // addFaq: builder.mutation({
-    //   query: payload => ({
-    //     url: '/admin/faq',
-    //     method: 'POST',
-    //     body: {
-    //       ...payload,
-    //     }
-    //   }),
-    //   invalidatesTags: [
-    //     { type: 'Faq', id: "LIST" }
-    //   ]
-    // }),
-    // updateFaq: builder.mutation({
-    //   query: ({ id, ...faq }) => {
-    //     console.log(faq, { faq }, { ...faq });
-    //     return {
-    //       url: `/admin/faq/${id}`,
-    //       method: "PUT",
-    //       body: {
-    //         ...faq,
-    //       },
-    //     }
-    //   },
-    //   invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
-    // }),
+    addBlog: builder.mutation({
+      query: (payload) => ({
+        url: "/admin/blog",
+        method: "POST",
+        body: {
+          ...payload,
+        },
+      }),
+      invalidatesTags: [{ type: "Blog", id: "LIST" }],
+    }),
+    updateBlog: builder.mutation({
+      query: ({ id, ...blog }) => {
+        return {
+          url: `/admin/blog/${id}`,
+          method: "PUT",
+          body: {
+            ...blog,
+          },
+        };
+      },
+      invalidatesTags: (result, error, arg) => [{ type: "Blog", id: arg.id }],
+    }),
     // updateLocalFaq: builder.mutation({
     //   query: ({ id, ...faq }) => ({
     //     url: `/admin/faq/${id}/update-locals`,
@@ -103,25 +99,22 @@ export const blogApiSlice = apiSlice.injectEndpoints({
     //   }),
     //   invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
     // }),
-    // deleteFaq: builder.mutation({
-    //   query: (id) => ({
-    //     url: `/admin/faq/${id}`,
-    //     method: 'DELETE',
-    //   }),
-    //   invalidatesTags: (result, error, arg) => [
-    //     { type: 'Faq', id: arg.id }
-    //   ]
-    // }),
+    deleteBlog: builder.mutation({
+      query: (id) => ({
+        url: `/admin/blog/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "Blog", id: arg.id }],
+    }),
   }),
 });
 
 export const {
   useGetBlogsQuery,
-  // useGetSingleFaqQuery,
-  // useAddFaqMutation,
-  // useUpdateFaqMutation,
+  useAddBlogMutation,
+  useUpdateBlogMutation,
   // useUpdateLocalFaqMutation,
-  // useDeleteFaqMutation,
+  useDeleteBlogMutation,
 } = blogApiSlice;
 
 // returns the query result object

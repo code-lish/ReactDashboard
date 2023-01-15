@@ -11,7 +11,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import PersistLogin from "./features/auth/PersistLogin";
-import SingleFaq from "./pages/FAQ/SingleFaq";
 
 const Prefetch = lazy(() => import("./features/auth/PreFetch"));
 const AppProvider = lazy(() => import("./components/layout/AppProvider"));
@@ -21,16 +20,15 @@ const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 
 const Faq = lazy(() => import("./pages/FAQ/Faq"));
+const SingleFaq = lazy(() => import("./pages/FAQ/SingleFaq"));
 const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
 const PackageService = lazy(() =>
   import("./pages/packageService/PackageService")
 );
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
-<<<<<<< HEAD
 const Blog = lazy(() => import("./pages/blogs/Blog"));
-=======
->>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
+const SingleBlog = lazy(() => import("./pages/blogs/SingelBlog"));
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 
 const App = () => {
@@ -53,16 +51,10 @@ const App = () => {
               <Route path="contact-us" element={<ContactUS />} />
               <Route path="package-services" element={<PackageService />} />
               <Route path="jobs" element={<Job />} />
-<<<<<<< HEAD
               <Route path="packages" element={<Packages />} />
-              <Route path="blogs" element={<Blog />} />
               <Route path="create-package" element={<CreatePackage />} />
-=======
-              <Route path="packages">
-                <Route index element={<Packages />} />
-                <Route path="create" element={<CreatePackage />} />
-              </Route>
->>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
+              <Route path="blogs" element={<Blog />} />
+              <Route path="blogs/:id" element={<SingleBlog />} />
             </Route>
           </Route>
         </Route>

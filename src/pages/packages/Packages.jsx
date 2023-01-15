@@ -252,7 +252,6 @@ const Packages = () => {
                     color: theme.palette.error.main,
                   }}
                 />
-<<<<<<< HEAD
               </Tooltip>
             }
             label="Delete"
@@ -301,17 +300,6 @@ const Packages = () => {
     ],
     [theme]
   );
-=======
-                <Link to="create">Create Package</Link>
-                <Box
-                    className="scrollbar"
-                    m="10px 0 0 0"
-                    height="73vh"
-                    sx={{
-                        "& .MuiDataGrid-root": {
-                            border: "none",
-                        },
->>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
 
   return (
     <>

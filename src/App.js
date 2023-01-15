@@ -22,9 +22,13 @@ const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 
 const Faq = lazy(() => import("./pages/FAQ/Faq"));
 const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
-const PackageService = lazy(() => import("./pages/packageService/PackageService"));
+const PackageService = lazy(() =>
+  import("./pages/packageService/PackageService")
+);
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
+const Blog = lazy(() => import("./pages/blogs/Blog"));
+const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -47,6 +51,8 @@ const App = () => {
               <Route path="package-services" element={<PackageService />} />
               <Route path="jobs" element={<Job />} />
               <Route path="packages" element={<Packages />} />
+              <Route path="blogs" element={<Blog />} />
+              <Route path="create-package" element={<CreatePackage />} />
             </Route>
           </Route>
         </Route>

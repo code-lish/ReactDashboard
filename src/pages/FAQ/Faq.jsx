@@ -3,7 +3,10 @@ import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Header from "../../components/Header";
 import { Box, useTheme, useMediaQuery, Tooltip, Button } from "@mui/material";
 import Meta from "../../components/common/Meta";
-import { useDeleteFaqMutation, useGetFaqsQuery } from "../../features/faq/faqApiSlice";
+import {
+  useDeleteFaqMutation,
+  useGetFaqsQuery,
+} from "../../features/faq/faqApiSlice";
 import { selectAllFaqs } from "../../features/faq/faqApiSlice";
 import { useSelector } from "react-redux";
 import {
@@ -11,16 +14,16 @@ import {
   ModeEditOutlined,
   DeleteOutlined,
   ReadMoreOutlined,
-  BookOnlineOutlined
+  BookOnlineOutlined,
 } from "@mui/icons-material";
 import EditFaq from "./EditFaq";
 import { useNavigate } from "react-router-dom";
 import CreateFaq from "./CreateFaq";
-import LocalFaq from './LocalFaq'
-import Swal from "sweetalert2"
-import withReactContent from "sweetalert2-react-content"
+import LocalFaq from "./LocalFaq";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
-const MySwal = withReactContent(Swal)
+const MySwal = withReactContent(Swal);
 
 const FAQ = () => {
   const theme = useTheme();
@@ -32,27 +35,26 @@ const FAQ = () => {
   const { isLoading, isSuccess, isError, error } = useGetFaqsQuery();
 
   const faqs = useSelector(selectAllFaqs);
-  const [pageSize, setPageSize] = useState(11);
-
+  const [pageSize, setPageSize] = useState(10);
 
   const handleEditFaq = (id) => {
-    setShowModal('edit');
+    setShowModal("edit");
     setSinglFaqId(id);
   };
 
   const handleCreateFaq = (id) => {
-    setShowModal('create');
+    setShowModal("create");
   };
 
   const handleLocalFaq = (id) => {
-    setShowModal('local');
+    setShowModal("local");
     setSinglFaqId(id);
   };
 
   const [
     deleteFaq,
     { isSuccess: isDelSuccess, isError: isDelError, error: delerror },
-  ] = useDeleteFaqMutation()
+  ] = useDeleteFaqMutation();
 
   const deleteHandler = async (id) => {
     MySwal.fire({
@@ -65,12 +67,12 @@ const FAQ = () => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        await deleteFaq(id)
+        await deleteFaq(id);
 
-        MySwal.fire("Deleted!", "Your file has been deleted.", "success")
+        MySwal.fire("Deleted!", "Your file has been deleted.", "success");
       }
-    })
-  }
+    });
+  };
 
   const columns = useMemo(
     () => [
@@ -192,10 +194,7 @@ const FAQ = () => {
         setShowModal={setShowModal}
         id={singleFaqId}
       />
-      <CreateFaq
-        showModal={showModal}
-        setShowModal={setShowModal}
-      />
+      <CreateFaq showModal={showModal} setShowModal={setShowModal} />
       <LocalFaq
         showModal={showModal}
         setShowModal={setShowModal}

@@ -1,21 +1,29 @@
 import { useState, useMemo } from "react";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridActionsCellItem } from "@mui/x-data-grid";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery, Tooltip } from "@mui/material";
+import { GppGood, Pending } from "@mui/icons-material";
 import Meta from "../../components/common/Meta";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { selectAllContacts, useGetContactsQuery } from "../../features/contact/contactApiSlice";
-import ContactUsMenu from './ContactUsMenu'
+import {
+  selectAllContacts,
+  useGetContactsQuery,
+  useChangeStatusMutation,
+} from "../../features/contact/contactApiSlice";
 
 const ContactUs = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const isNoneMobile = useMediaQuery("(min-width:900px)");
   const [showModal, setShowModal] = useState(false);
-  const [singleFaqId, setSinglFaqId] = useState(null);
 
   const { isLoading, isSuccess, isError, error } = useGetContactsQuery();
+  const [changeStatus] = useChangeStatusMutation();
+
+  const changeContactStatus = async (status, id) => {
+    await changeStatus({ id, status });
+  };
 
   const contacts = useSelector(selectAllContacts);
   const [pageSize, setPageSize] = useState(11);
@@ -74,17 +82,63 @@ const ContactUs = () => {
         valueFormatter: (value) => {
           return value?.status;
         },
-        flex: 1,
+        flex: 0.5,
         type: "string",
       },
       {
-        field: "Change Status",
-        headerName: "Change Status",
-        flex: 0.3,
-        renderCell: (params) => {
-          return <ContactUsMenu id={params.id} />;
-        },
-      }
+        field: "actions",
+        headerName: "Change Stauts",
+        type: "actions",
+        flex: 0.7,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Fulfilled"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <GppGood
+                  sx={{
+                    color: theme.palette.success.main,
+                  }}
+                />
+              </Tooltip>
+            }
+            label="Fulfilled"
+            onClick={() => changeContactStatus("fulfilled", params.id)}
+          />,
+          <GridActionsCellItem
+            icon={
+              <Tooltip
+                title="Pending"
+                PopperProps={{
+                  sx: {
+                    "& .MuiTooltip-tooltip": {
+                      backgroundColor: theme.palette.grey[800],
+                      color: theme.palette.grey[200],
+                    },
+                  },
+                }}
+              >
+                <Pending
+                  sx={{
+                    color: theme.palette.warning.main,
+                  }}
+                />
+              </Tooltip>
+            }
+            label="Pending"
+            onClick={() => changeContactStatus("pending", params.id)}
+          />,
+        ],
+      },
     ],
     [theme]
   );
@@ -94,10 +148,7 @@ const ContactUs = () => {
       <Meta title="Contact-Us | Rahanet Dashboard" />
 
       <Box m="15px">
-        <Header
-          title="Contacts' Lists"
-          subtitle="Check them Out!"
-        />
+        <Header title="Contacts' Lists" subtitle="Check them Out!" />
         <Box
           className="scrollbar"
           m="10px 0 0 0"

@@ -23,6 +23,8 @@ const ForgotPassword = lazy(() => import("./pages/auth/ForgotPassword"));
 const Faq = lazy(() => import("./pages/FAQ/Faq"));
 const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
 const PackageService = lazy(() => import("./pages/packageService/PackageService"));
+const Job = lazy(() => import("./pages/job/Job"));
+const Packages = lazy(() => import("./pages/packages/Packages"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -43,6 +45,8 @@ const App = () => {
               <Route path="faq/:id" element={<SingleFaq />} />
               <Route path="contact-us" element={<ContactUS />} />
               <Route path="package-services" element={<PackageService />} />
+              <Route path="jobs" element={<Job />} />
+              <Route path="packages" element={<Packages />} />
             </Route>
           </Route>
         </Route>

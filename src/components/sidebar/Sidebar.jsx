@@ -91,17 +91,17 @@ const LeftSidebar = () => {
       selected,
       setSelected,
     },
-    {
-      title: "Services",
-      to: "/dashboard/services",
-      icon: (
-        <ContactsOutlined
-          sx={{ fontSize: "25px", color: theme.palette.primary.main }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
+    // {
+    //   title: "Services",
+    //   to: "/dashboard/services",
+    //   icon: (
+    //     <ContactsOutlined
+    //       sx={{ fontSize: "25px", color: theme.palette.primary.main }}
+    //     />
+    //   ),
+    //   selected,
+    //   setSelected,
+    // },
     {
       subMenuTitle: "Requests",
       subMenuIcon: (
@@ -112,7 +112,7 @@ const LeftSidebar = () => {
       subMenuItems: [
         {
           title: "Job Business",
-          to: "/dashboard/job-business",
+          to: "/dashboard/jobs",
           icon: (
             <SurfingSharp
               sx={{ fontSize: "25px", color: theme.palette.primary.main }}

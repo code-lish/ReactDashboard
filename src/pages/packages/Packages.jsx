@@ -16,7 +16,7 @@ import {
   ReadMoreOutlined,
   BookOnlineOutlined,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useTranslation } from "react-i18next";
@@ -252,6 +252,7 @@ const Packages = () => {
                     color: theme.palette.error.main,
                   }}
                 />
+<<<<<<< HEAD
               </Tooltip>
             }
             label="Delete"
@@ -300,6 +301,17 @@ const Packages = () => {
     ],
     [theme]
   );
+=======
+                <Link to="create">Create Package</Link>
+                <Box
+                    className="scrollbar"
+                    m="10px 0 0 0"
+                    height="73vh"
+                    sx={{
+                        "& .MuiDataGrid-root": {
+                            border: "none",
+                        },
+>>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
 
   return (
     <>

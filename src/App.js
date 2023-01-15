@@ -27,7 +27,10 @@ const PackageService = lazy(() =>
 );
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
+<<<<<<< HEAD
 const Blog = lazy(() => import("./pages/blogs/Blog"));
+=======
+>>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 
 const App = () => {
@@ -50,9 +53,16 @@ const App = () => {
               <Route path="contact-us" element={<ContactUS />} />
               <Route path="package-services" element={<PackageService />} />
               <Route path="jobs" element={<Job />} />
+<<<<<<< HEAD
               <Route path="packages" element={<Packages />} />
               <Route path="blogs" element={<Blog />} />
               <Route path="create-package" element={<CreatePackage />} />
+=======
+              <Route path="packages">
+                <Route index element={<Packages />} />
+                <Route path="create" element={<CreatePackage />} />
+              </Route>
+>>>>>>> 6c2ed297f6d2a79e93e9f810b321f0075697c021
             </Route>
           </Route>
         </Route>

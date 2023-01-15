@@ -16,7 +16,7 @@ import {
     ReadMoreOutlined,
     BookOnlineOutlined,
 } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 import { useTranslation } from "react-i18next"
@@ -312,7 +312,7 @@ const Packages = () => {
                     title="Internet Packages"
                     subtitle="All Packages"
                 />
-                <Button onClick={() => handleCreateFaq()}>Create Package</Button>
+                <Link to="create">Create Package</Link>
                 <Box
                     className="scrollbar"
                     m="10px 0 0 0"

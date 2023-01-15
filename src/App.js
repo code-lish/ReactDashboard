@@ -25,6 +25,7 @@ const ContactUS = lazy(() => import("./pages/contactUs/ContactUs"));
 const PackageService = lazy(() => import("./pages/packageService/PackageService"));
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
+const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -46,7 +47,10 @@ const App = () => {
               <Route path="contact-us" element={<ContactUS />} />
               <Route path="package-services" element={<PackageService />} />
               <Route path="jobs" element={<Job />} />
-              <Route path="packages" element={<Packages />} />
+              <Route path="packages">
+                <Route index element={<Packages />} />
+                <Route path="create" element={<CreatePackage />} />
+              </Route>
             </Route>
           </Route>
         </Route>

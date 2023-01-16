@@ -1,4 +1,4 @@
-const APP_ENV = "development";
+const APP_ENV = "production";
 const BASE_URL = "http://localhost:5000";
 const PRODUCTION_URL = "https://raha-api.onrender.com";
 

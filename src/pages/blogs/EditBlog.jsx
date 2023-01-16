@@ -10,12 +10,17 @@ import {
   Typography,
   IconButton,
   Box,
+  FormControl,
 } from "@mui/material";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import { useUpdateBlogMutation } from "../../features/blog/blogApiSlice";
 import { selectBlogById } from "../../features/blog/blogApiSlice";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useTranslation } from "react-i18next";
+import Select from "react-select";
 const EditBlog = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
   const blog = useSelector((state) => selectBlogById(state, id));
@@ -24,10 +29,35 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
   const [content, setContent] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [categories, setCategories] = useState("");
-  const [status, setStatus] = useState("");
   const [image, setImage] = useState("");
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
+
+  const { t } = useTranslation();
+  const statusOptions = [
+    { label: "publish", value: "publish" },
+    { label: "draft", value: "draft" },
+    { label: "pending", value: "pending" },
+  ];
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    control,
+    formState: { errors, isSubmitting },
+    reset,
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(),
+  });
+
+  const status = useWatch({
+    control,
+    name: "status",
+    defaultValue: "status",
+  });
 
   const [updateBlog, { isLoading, isSuccess, isError, error }] =
     useUpdateBlogMutation();
@@ -39,7 +69,6 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
       setContent("");
       setExcerpt("");
       setCategories("");
-      setStatus("");
       setImage("");
       setSelectedFile(undefined);
       setPreview(undefined);
@@ -52,7 +81,6 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
       setExcerpt(blog?.excerpt?.fa);
       setImage(blog?.image);
       setCategories(blog?.categories);
-      setStatus(blog?.status);
     }
   }, [isSuccess, blog]);
 
@@ -89,13 +117,13 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData()
-    formData.append('title', title)
-    formData.append('slug', slug)
-    formData.append('content', content)
-    formData.append('excerpt', excerpt)
-    formData.append('image', selectedFile)
-    formData.append('status', status)
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("slug", slug);
+    formData.append("content", content);
+    formData.append("excerpt", excerpt);
+    formData.append("image", selectedFile);
+    formData.append("status", status);
 
     await updateBlog({ id, formData });
     setShowModal(false);
@@ -166,33 +194,79 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
             fullWidth
             variant="standard"
           />
-          <FlexBetween>
-            <TextField
-              sx={{ mr: "30px" }}
-              autoFocus
-              margin="dense"
-              id="categories"
-              label="categories"
-              type="text"
-              onChange={(e) => setCategories(e.target.value)}
-              defaultValue={blog?.categories}
-              multiline
-              fullWidth
-              variant="standard"
+
+          <TextField
+            sx={{ mr: "30px" }}
+            autoFocus
+            margin="dense"
+            id="categories"
+            label="categories"
+            type="text"
+            onChange={(e) => setCategories(e.target.value)}
+            defaultValue={blog?.categories}
+            multiline
+            fullWidth
+            variant="standard"
+          />
+          <FormControl
+            fullWidth
+            sx={{
+              mt: "30px",
+              mb: "20px",
+              ".select__control": {
+                backgroundColor: theme.palette.bgColor[1000],
+                padding: "7px",
+                borderColor: theme.palette.black[1100],
+                "&:hover": {
+                  borderColor: theme.palette.grey[900],
+                },
+              },
+              ".select__placeholder": {
+                color: theme.palette.grey[1100],
+              },
+
+              ".select__menu": {
+                backgroundColor: theme.palette.bgColor.main,
+                zIndex: 10000,
+                "& > div": {
+                  "& > div": {
+                    backgroundColor: theme.palette.bgColor.main,
+                    "&:hover": {
+                      backgroundColor: theme.palette.primary[700],
+                    },
+                  },
+                },
+              },
+              ".select__single-value": {
+                color: theme.palette.grey[900],
+              },
+            }}
+          >
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <Select
+                    controlShouldRenderValue={true}
+                    options={statusOptions}
+                    id="status"
+                    name="status"
+                    placeholder={t("Status")}
+                    className={`form-multi-select react-select ${
+                      errors.status && "is-invalid"
+                    }`}
+                    classNamePrefix="select"
+                    errorText={true}
+                    aria-invalid={errors.status && true}
+                    aria-errormessage="status-invalid"
+                    {...field}
+                  />
+                );
+              }}
             />
-            <TextField
-              autoFocus
-              margin="dense"
-              id="status"
-              label="status"
-              type="text"
-              onChange={(e) => setStatus(e.target.value)}
-              defaultValue={blog?.status}
-              multiline
-              fullWidth
-              variant="standard"
-            />
-          </FlexBetween>
+          </FormControl>
+
           <FlexBetween sx={{ mt: "20px" }}>
             <FlexBetween>
               <Typography sx={{ mr: "10px" }}>Choice your photo</Typography>

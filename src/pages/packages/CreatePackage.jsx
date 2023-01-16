@@ -21,15 +21,15 @@ import { useTranslation } from "react-i18next";
 import Select from "react-select";
 import { useAddPackageMutation } from "../../features/packages/packagesApiSlice";
 import PackageSchema from "../../utils/validationSchema/PackageSchema";
-import withReactContent from 'sweetalert2-react-content'
-import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom'
-const MySwal = withReactContent(Swal)
+import withReactContent from "sweetalert2-react-content";
+import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+const MySwal = withReactContent(Swal);
 
 const CreatePackage = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const provinceOptions = [
     { label: "هرات", value: "herat" },
@@ -75,25 +75,29 @@ const CreatePackage = () => {
     resolver: yupResolver(PackageSchema),
   });
 
-  const [addPackage, {
-    isLoading,
-    isSuccess,
-    isError,
-    error
-  }] = useAddPackageMutation()
+  const [addPackage, { isLoading, isSuccess, isError, error }] =
+    useAddPackageMutation();
 
-  const isNew = useWatch({ control, name: 'isNew', defaultValue: false })
-  const packageType = useWatch({ control, name: 'type', defaultValue: 'limited' })
-  const isPackagePlus = useWatch({ control, name: 'is-package-plus', defaultValue: false })
+  const isNew = useWatch({ control, name: "isNew", defaultValue: false });
+  const packageType = useWatch({
+    control,
+    name: "type",
+    defaultValue: "limited",
+  });
+  const isPackagePlus = useWatch({
+    control,
+    name: "is-package-plus",
+    defaultValue: false,
+  });
 
   const onSubmitHandler = async (data) => {
     try {
-      data.category = data.category.value
-      data.duration = data.duration.value
-      data.priority = data.priority.value
-      data.province = data.province.value
-      data.isNew = isNew
-      data["is-package-plus"] = isPackagePlus && true
+      data.category = data.category.value;
+      data.duration = data.duration.value;
+      data.priority = data.priority.value;
+      data.province = data.province.value;
+      data.isNew = isNew;
+      data["is-package-plus"] = isPackagePlus && true;
 
       await addPackage(data).unwrap();
       await MySwal.fire({
@@ -102,17 +106,17 @@ const CreatePackage = () => {
         icon: "success",
         timer: 2000,
         timerProgressBar: true,
-        showConfirmButton: false
-      })
-      reset()
-      navigate('/dashboard/packages')
-
-
+        showConfirmButton: false,
+      });
+      reset();
+      navigate("/dashboard/packages");
     } catch (rejectResp) {
-      const { data } = rejectResp
+      const { data } = rejectResp;
 
       if (data?.errors) {
-        data.errors.forEach(error => setError(error["param"], { type: "manual", message: error["msg"] }))
+        data.errors.forEach((error) =>
+          setError(error["param"], { type: "manual", message: error["msg"] })
+        );
       } else {
         MySwal.fire({
           title: t("error"),
@@ -120,11 +124,11 @@ const CreatePackage = () => {
           icon: "warning",
           timer: 2000,
           timerProgressBar: true,
-          showConfirmButton: false
-        })
+          showConfirmButton: false,
+        });
       }
     }
-  }
+  };
 
   return (
     <Grid container sx={{ mt: "10px", mb: "20px" }} gap="20px">
@@ -182,7 +186,7 @@ const CreatePackage = () => {
                   }}
                 />
               </FlexBetween>
-              <FlexBetween>
+              <FlexBetween sx={{ mt: "20px" }}>
                 <TextField
                   {...register("price", { required: true })}
                   fullWidth
@@ -193,7 +197,6 @@ const CreatePackage = () => {
                   helperText={errors.price?.message}
                   sx={{
                     mr: "10px",
-                    mt: "20px",
                     "& .MuiFormLabel-root": {
                       "&.Mui-focused": {
                         color: theme.palette.grey[900],
@@ -204,17 +207,20 @@ const CreatePackage = () => {
                 <FormControl
                   fullWidth
                   sx={{
-                    ".selector__control": {
+                    ".select__control": {
                       backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      padding: "7px",
+                      borderColor: theme.palette.black[1100],
                       "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
+                        borderColor: theme.palette.grey[900],
                       },
                     },
-
-                    ".selector__menu": {
+                    ".select__placeholder": {
+                      color: theme.palette.grey[1100],
+                    },
+                    ".select__menu": {
                       backgroundColor: theme.palette.bgColor.main,
+                      zIndex: 10000,
                       "& > div": {
                         "& > div": {
                           backgroundColor: theme.palette.bgColor.main,
@@ -224,7 +230,7 @@ const CreatePackage = () => {
                         },
                       },
                     },
-                    ".selector__single-value": {
+                    ".select__single-value": {
                       color: theme.palette.grey[900],
                     },
                   }}
@@ -240,7 +246,9 @@ const CreatePackage = () => {
                           id="province"
                           name="province"
                           placeholder={t("province")}
-                          className={`form-multi-select react-select ${errors.province && "is-invalid"}`}
+                          className={`form-multi-select react-select ${
+                            errors.province && "is-invalid"
+                          }`}
                           classNamePrefix="select"
                           errorText={true}
                           aria-invalid={errors.province && true}
@@ -252,39 +260,44 @@ const CreatePackage = () => {
                   />
                 </FormControl>
               </FlexBetween>
-              {isPackagePlus && <TextField
-                {...register("plus-price", { required: true })}
-                fullWidth
-                id="plus-price"
-                label="Package Plus Price"
-                variant="outlined"
-                error={errors["plus-price"] && true}
-                helperText={errors["plus-price"]?.message}
-                sx={{
-                  mt: "10px",
-                  "& .MuiFormLabel-root": {
-                    "&.Mui-focused": {
-                      color: theme.palette.grey[900],
+              {isPackagePlus && (
+                <TextField
+                  {...register("plus-price", { required: true })}
+                  fullWidth
+                  id="plus-price"
+                  label="Package Plus Price"
+                  variant="outlined"
+                  error={errors["plus-price"] && true}
+                  helperText={errors["plus-price"]?.message}
+                  sx={{
+                    mt: "10px",
+                    "& .MuiFormLabel-root": {
+                      "&.Mui-focused": {
+                        color: theme.palette.grey[900],
+                      },
                     },
-                  },
-                }}
-              />
-              }
-              <FlexBetween>
+                  }}
+                />
+              )}
+              <FlexBetween sx={{ mt: "20px" }}>
                 <FormControl
                   fullWidth
                   sx={{
-                    ".selector__control": {
+                    ".select__control": {
                       backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      padding: "7px",
+                      borderColor: theme.palette.black[1100],
                       "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
+                        borderColor: theme.palette.grey[900],
                       },
                     },
+                    ".select__placeholder": {
+                      color: theme.palette.grey[1100],
+                    },
 
-                    ".selector__menu": {
+                    ".select__menu": {
                       backgroundColor: theme.palette.bgColor.main,
+                      zIndex: 10000,
                       "& > div": {
                         "& > div": {
                           backgroundColor: theme.palette.bgColor.main,
@@ -294,7 +307,7 @@ const CreatePackage = () => {
                         },
                       },
                     },
-                    ".selector__single-value": {
+                    ".select__single-value": {
                       color: theme.palette.grey[900],
                     },
                   }}
@@ -310,7 +323,9 @@ const CreatePackage = () => {
                           id="duration"
                           name="duration"
                           placeholder={t("Duration")}
-                          className={`form-multi-select react-select ${errors.duration && "is-invalid"}`}
+                          className={`form-multi-select react-select ${
+                            errors.duration && "is-invalid"
+                          }`}
                           classNamePrefix="select"
                           errorText={true}
                           aria-invalid={errors.duration && true}
@@ -321,43 +336,47 @@ const CreatePackage = () => {
                     }}
                   />
                 </FormControl>
-                {packageType === 'limited' && <TextField
-                  {...register("bandwidth", { required: true })}
-                  fullWidth
-                  id="bandwidth"
-                  label="Package bandwidth"
-                  variant="outlined"
-                  error={errors.bandwidth && true}
-                  helperText={errors.bandwidth?.message}
-                  sx={{
-                    mr: "10px",
-                    mt: "20px",
-                    "& .MuiFormLabel-root": {
-                      "&.Mui-focused": {
-                        color: theme.palette.grey[900],
+                {packageType === "limited" && (
+                  <TextField
+                    {...register("bandwidth", { required: true })}
+                    fullWidth
+                    id="bandwidth"
+                    label="Package bandwidth"
+                    variant="outlined"
+                    error={errors.bandwidth && true}
+                    helperText={errors.bandwidth?.message}
+                    sx={{
+                      ml: "10px",
+                      "& .MuiFormLabel-root": {
+                        "&.Mui-focused": {
+                          color: theme.palette.grey[900],
+                        },
                       },
-                    },
-                  }}
-                />
-                }
-
+                    }}
+                  />
+                )}
               </FlexBetween>
 
-              <FlexBetween sx={{ mt: "15px" }}>
+              <FlexBetween sx={{ mt: "20px" }}>
                 <FormControl
                   fullWidth
                   sx={{
-                    ".selector__control": {
+                    mr: "10px",
+                    ".select__control": {
                       backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      padding: "7px",
+                      borderColor: theme.palette.black[1100],
                       "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
+                        borderColor: theme.palette.grey[900],
                       },
                     },
+                    ".select__placeholder": {
+                      color: theme.palette.grey[1100],
+                    },
 
-                    ".selector__menu": {
+                    ".select__menu": {
                       backgroundColor: theme.palette.bgColor.main,
+                      zIndex: 10000,
                       "& > div": {
                         "& > div": {
                           backgroundColor: theme.palette.bgColor.main,
@@ -367,7 +386,7 @@ const CreatePackage = () => {
                         },
                       },
                     },
-                    ".selector__single-value": {
+                    ".select__single-value": {
                       color: theme.palette.grey[900],
                     },
                   }}
@@ -386,7 +405,9 @@ const CreatePackage = () => {
                           noResultsText={t("no-info")}
                           isClearable={true}
                           options={categoriesOption}
-                          className={`form-multi-select react-select ${errors.category && " is-invalid"}`}
+                          className={`form-multi-select react-select ${
+                            errors.category && " is-invalid"
+                          }`}
                           classNamePrefix="select"
                           errorText={true}
                           aria-invalid={errors.category && true}
@@ -399,17 +420,21 @@ const CreatePackage = () => {
                 <FormControl
                   fullWidth
                   sx={{
-                    ".selector__control": {
+                    ".select__control": {
                       backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      padding: "7px",
+                      borderColor: theme.palette.black[1100],
                       "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
+                        borderColor: theme.palette.grey[900],
                       },
                     },
+                    ".select__placeholder": {
+                      color: theme.palette.grey[1100],
+                    },
 
-                    ".selector__menu": {
+                    ".select__menu": {
                       backgroundColor: theme.palette.bgColor.main,
+                      zIndex: 10000,
                       "& > div": {
                         "& > div": {
                           backgroundColor: theme.palette.bgColor.main,
@@ -419,7 +444,7 @@ const CreatePackage = () => {
                         },
                       },
                     },
-                    ".selector__single-value": {
+                    ".select__single-value": {
                       color: theme.palette.grey[900],
                     },
                   }}
@@ -431,11 +456,15 @@ const CreatePackage = () => {
                       return (
                         <Select
                           controlShouldRenderValue={true}
-                          options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(no => ({ label: no, value: no }))}
+                          options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(
+                            (no) => ({ label: no, value: no })
+                          )}
                           id="priority"
                           name="priority"
                           placeholder={t("Priority")}
-                          className={`form-multi-select react-select ${errors.priority && "is-invalid"}`}
+                          className={`form-multi-select react-select ${
+                            errors.priority && "is-invalid"
+                          }`}
                           classNamePrefix="select"
                           errorText={true}
                           aria-invalid={errors.priority && true}
@@ -457,8 +486,7 @@ const CreatePackage = () => {
               <Typography variant="body1" sx={{ pb: "10px", pl: "-10px" }}>
                 Speed INfo
               </Typography>
-              {packageType === "limited"
-                ?
+              {packageType === "limited" ? (
                 <FlexBetween>
                   <TextField
                     {...register("dailyVolume", { required: true })}
@@ -495,7 +523,7 @@ const CreatePackage = () => {
                     }}
                   />
                 </FlexBetween>
-                :
+              ) : (
                 <FlexBetween>
                   <TextField
                     {...register("daySpeed", { required: true })}
@@ -532,7 +560,7 @@ const CreatePackage = () => {
                     }}
                   />
                 </FlexBetween>
-              }
+              )}
               <Box display="flex" alignItems="center">
                 <Box sx={{ position: "relative", mt: "20px" }}>
                   <Button
@@ -552,7 +580,7 @@ const CreatePackage = () => {
                   >
                     {" "}
                     Submit
-                    {isSubmitting &&
+                    {isSubmitting && (
                       <CircularProgress
                         size={24}
                         sx={{
@@ -563,7 +591,7 @@ const CreatePackage = () => {
                           transform: "translate(-50%,-50%) !important",
                         }}
                       />
-                    }
+                    )}
                   </Button>
                 </Box>
 
@@ -586,7 +614,6 @@ const CreatePackage = () => {
                 </Button>
               </Box>
             </Box>
-
           </Box>
         </form>
       </Grid>
@@ -617,13 +644,13 @@ const CreatePackage = () => {
                   value="limited"
                   control={<Radio />}
                   label="limited"
-                  {...register('type')}
+                  {...register("type")}
                 />
                 <FormControlLabel
                   value="unlimited"
                   control={<Radio />}
                   label="unlimited"
-                  {...register('type')}
+                  {...register("type")}
                 />
               </RadioGroup>
             </FormControl>
@@ -642,13 +669,13 @@ const CreatePackage = () => {
                   value="dedicated"
                   control={<Radio />}
                   label="Dedicated"
-                  {...register('bandwidth-type')}
+                  {...register("bandwidth-type")}
                 />
                 <FormControlLabel
                   value="shared"
                   control={<Radio />}
                   label="Shared"
-                  {...register('bandwidth-type')}
+                  {...register("bandwidth-type")}
                 />
               </RadioGroup>
             </FormControl>
@@ -661,7 +688,7 @@ const CreatePackage = () => {
                 label="Plus package"
                 id="is-package-plus"
                 name="is-package-plus"
-                {...register('is-package-plus')}
+                {...register("is-package-plus")}
               />
               <FormControlLabel
                 control={<Checkbox />}
@@ -672,7 +699,7 @@ const CreatePackage = () => {
                 label="Is New?"
                 name="isNew"
                 id="isNew"
-                {...register('isNew')}
+                {...register("isNew")}
               />
             </FormGroup>
           </Box>

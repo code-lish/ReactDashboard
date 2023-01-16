@@ -76,7 +76,7 @@ export const blogApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Blog", id: "LIST" }],
     }),
     updateBlog: builder.mutation({
-      query: payload => {
+      query: (payload) => {
         return {
           url: `/admin/blog/${payload.id}`,
           method: "PUT",
@@ -85,16 +85,16 @@ export const blogApiSlice = apiSlice.injectEndpoints({
       },
       invalidatesTags: (result, error, arg) => [{ type: "Blog", id: arg.id }],
     }),
-    // updateLocalFaq: builder.mutation({
-    //   query: ({ id, ...faq }) => ({
-    //     url: `/admin/faq/${id}/update-locals`,
-    //     method: "PUT",
-    //     body: {
-    //       ...faq,
-    //     },
-    //   }),
-    //   invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
-    // }),
+    updateLocalBlog: builder.mutation({
+      query: ({ id, ...blog }) => ({
+        url: `/admin/blog/${id}/update-local`,
+        method: "PUT",
+        body: {
+          ...blog,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "Blog", id: arg.id }],
+    }),
     deleteBlog: builder.mutation({
       query: (id) => ({
         url: `/admin/blog/${id}`,
@@ -109,7 +109,7 @@ export const {
   useGetBlogsQuery,
   useAddBlogMutation,
   useUpdateBlogMutation,
-  // useUpdateLocalFaqMutation,
+  useUpdateLocalBlogMutation,
   useDeleteBlogMutation,
 } = blogApiSlice;
 

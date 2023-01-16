@@ -13,6 +13,7 @@ const lightTheme = {
     800: "#63625e", //this is used
     900: "#31312f", //this is used
     1000: "#000000", // manually adjusted
+    1100: "hsl(0, 0%, 50%)",
   },
   primary: {
     100: "#e2e1fa",
@@ -50,6 +51,7 @@ const lightTheme = {
     800: "#000000",
     900: "#000000",
     1000: "000000", //// manually adjusted it is used
+    1100: "rgba(151, 152, 155,0.6);", //// manually adjusted it is used
   },
   light: {
     100: "#fcfcff",
@@ -91,6 +93,7 @@ const darkTheme = {
     800: "#94938d", // manually adjusted this is used
     900: "#fdfdfb", //this is used
     1000: "#f6f6f6", // manually adjusted
+    1100: "rgba(255, 255, 255, 0.7)",
   },
   primary: {
     100: "#e3e1fc",
@@ -128,6 +131,7 @@ const darkTheme = {
     800: "#5f6066",
     900: "#303033",
     1000: "#ffdd32", //// manually adjusted it is used
+    1100: "rgba(255, 255, 255, 0.3)", //// manually adjusted it is used
   },
   light: {
     100: "#d4d5db",

@@ -1,14 +1,25 @@
 import { useState, useMemo, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Header from "../../components/Header";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  useTheme,
+  Typography,
+  IconButton,
+  Box,
+} from "@mui/material";
 import Meta from "../../components/common/Meta";
 import { useGetBlogsQuery } from "../../features/blog/blogApiSlice";
 import { useParams } from "react-router-dom";
+import FlexBetween from "../../components/FlexBetween";
 
-const SingleBlog = () => {
+const SingleBlog = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
-  const { id } = useParams();
 
   const { blog } = useGetBlogsQuery("blogList", {
     selectFromResult: ({ data }) => ({
@@ -16,133 +27,151 @@ const SingleBlog = () => {
     }),
   });
 
-  const [blogArray, setBlogArray] = useState([blog]);
+  const date = new Date(blog?.createdAt).toDateString();
 
-  const columns = useMemo(
-    () => [
-      {
-        field: "title",
-        headerName: "Title",
-        valueFormatter: ({ value }) => {
-          return value?.fa;
-        },
-        flex: 0.5,
-        type: "string",
-      },
-      {
-        field: "content",
-        headerName: "Content",
-        valueFormatter: ({ value }) => {
-          return value?.fa;
-        },
-        flex: 2,
-        type: "string",
-      },
-      {
-        field: "slug",
-        headerName: "Slug",
-        flex: 1,
-        type: "string",
-      },
-      {
-        field: "excerpt",
-        valueFormatter: ({ value }) => {
-          return value?.fa;
-        },
-        headerName: "Excerpt",
-        flex: 1,
-        type: "string",
-      },
-      {
-        field: "comments",
-        headerName: "Comments",
-        valueFormatter: ({ value }) => {
-          return value?.length;
-        },
-        flex: 0.5,
-        type: "string",
-      },
-      {
-        field: "author",
-        valueFormatter: ({ value }) => {
-          return value?.fullName;
-        },
-
-        headerName: "Name",
-        flex: 0.7,
-        type: "string",
-      },
-      {
-        field: "createdAt",
-        valueFormatter: ({ value }) => {
-          const date = new Date(value);
-          return date.toDateString();
-        },
-        headerName: "Created At",
-        flex: 1,
-        type: "string",
-      },
-      {
-        field: "status",
-        headerName: "Status",
-        flex: 0.5,
-        type: "string",
-      },
-      {
-        field: "image",
-        headerName: "Image",
-        flex: 1.2,
-        renderCell: ({ value }) => (
-          <Box>
-            <img src={value} width="100%" height="150px" />
-          </Box>
-        ),
-      },
-    ],
-    [theme]
-  );
+  const handleClose = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
-      <Meta title="SingleBlog | Rahanet Dashboard" />
-
-      <Box m="15px">
-        <Header title="Single blog" subtitle="Single Blog" />
-        <Box
-          className="scrollbar"
-          m="10px 0 0 0"
-          height="73vh"
-          sx={{
-            "& .MuiDataGrid-root": {
-              border: "none",
-            },
-
-            "& .MuiDataGrid-columnHeaders": {
-              backgroundColor: theme.palette.light[400],
-              borderBottom: "none",
-            },
-            "& .MuiDataGrid-virtualScroller": {
-              backgroundColor: theme.palette.bgColor[1000],
-            },
-            "& .MuiDataGrid-footerContainer": {
-              borderTop: "none",
-              backgroundColor: theme.palette.light[400],
-            },
-            "& .MuiCheckbox-root": {
-              color: `${theme.palette.grey[800]} !important`,
-            },
-            "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-              color: `${theme.palette.grey[900]} !important`,
-            },
-          }}
+      <div>
+        <Dialog
+          open={showModal === "singleBlog"}
+          onClose={handleClose}
+          fullWidth
         >
-          <DataGrid
-            getRowHeight={() => "auto"}
-            rows={blogArray}
-            columns={columns}
-          />
-        </Box>
-      </Box>
+          <DialogTitle
+            sx={{
+              backgroundColor: theme.palette.bgColor[500],
+              textAlign: "center",
+              fontSize: "25px",
+              fontWeight: "bold",
+            }}
+          ></DialogTitle>
+          <DialogContent sx={{ backgroundColor: theme.palette.bgColor[500] }}>
+            <Box width="100%" height="350px" sx={{ mb: "30px" }}>
+              <img src={blog?.image} width="100%" height="100%" />
+            </Box>
+            <FlexBetween>
+              <TextField
+                sx={{ mr: "30px" }}
+                autoFocus
+                margin="dense"
+                id="title"
+                label="title"
+                type="text"
+                multiline
+                value={blog?.title?.fa}
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="slug"
+                label="slug"
+                type="text"
+                multiline
+                value={blog?.slug}
+                fullWidth
+                variant="standard"
+              />
+            </FlexBetween>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="content"
+              label="content"
+              type="text"
+              value={blog?.content?.fa}
+              multiline
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="authorName"
+              label="AuthorName"
+              type="text"
+              value={blog?.author?.fullName}
+              multiline
+              fullWidth
+              variant="standard"
+            />
+            <TextField
+              autoFocus
+              margin="dense"
+              id="status"
+              label="status"
+              type="text"
+              value={blog?.status}
+              multiline
+              fullWidth
+              variant="standard"
+            />
+            <FlexBetween>
+              <TextField
+                sx={{ mr: "30px" }}
+                autoFocus
+                margin="dense"
+                id="categories"
+                label="categories"
+                type="text"
+                value={blog?.categories}
+                multiline
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="status"
+                label="status"
+                type="text"
+                value={blog?.status}
+                multiline
+                fullWidth
+                variant="standard"
+              />
+            </FlexBetween>
+            <FlexBetween>
+              <TextField
+                sx={{ mr: "30px" }}
+                autoFocus
+                margin="dense"
+                id="careatedAt"
+                label="Careated At"
+                type="text"
+                value={date}
+                multiline
+                fullWidth
+                variant="standard"
+              />
+              <TextField
+                autoFocus
+                margin="dense"
+                id="comments Counts"
+                label="Comments Counts"
+                type="text"
+                value={blog?.comments?.length}
+                multiline
+                fullWidth
+                variant="standard"
+              />
+            </FlexBetween>
+          </DialogContent>
+          <DialogActions sx={{ backgroundColor: theme.palette.bgColor[500] }}>
+            <Button
+              onClick={handleClose}
+              sx={{ color: theme.palette.error.main }}
+            >
+              Close
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
     </>
   );
 };

@@ -24,7 +24,8 @@ import withReactContent from "sweetalert2-react-content";
 import EditBlog from "./EditBlog";
 import FlexBetween from "../../components/FlexBetween";
 import CreateBlog from "./CreateBlog";
-
+import SingleBlog from "./SingelBlog";
+import LocalBlog from "./LocalBlog";
 const MySwal = withReactContent(Swal);
 
 const Blog = () => {
@@ -38,8 +39,15 @@ const Blog = () => {
   const blogs = useSelector(selectAllBlogs);
   const [pageSize, setPageSize] = useState(10);
 
+  console.log("Blogssssssss", blogs);
+
   const handleEditBlog = (id) => {
     setShowModal("edit");
+    setSinglBlogId(id);
+  };
+
+  const handleSingleBlog = (id) => {
+    setShowModal("singleBlog");
     setSinglBlogId(id);
   };
 
@@ -47,9 +55,9 @@ const Blog = () => {
     setShowModal("create");
   };
 
-  const handleLocalFaq = (id) => {
-    // setShowModal("local");
-    // setSinglFaqId(id);
+  const handleLocalBlog = (id) => {
+    setShowModal("local");
+    setSinglBlogId(id);
   };
 
   const [
@@ -168,7 +176,7 @@ const Blog = () => {
               </Tooltip>
             }
             label="Language"
-            onClick={() => console.log("handle local lang")}
+            onClick={() => handleLocalBlog(params.id)}
           />,
           <GridActionsCellItem
             icon={
@@ -229,7 +237,7 @@ const Blog = () => {
               </Tooltip>
             }
             label="Read More"
-            onClick={() => navigate(`/dashboard/blogs/${params.id}`)}
+            onClick={() => handleSingleBlog(params.id)}
           />,
         ],
       },
@@ -245,6 +253,16 @@ const Blog = () => {
         id={singleBlogId}
       />
       <CreateBlog showModal={showModal} setShowModal={setShowModal} />
+      <LocalBlog
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={singleBlogId}
+      />
+      <SingleBlog
+        showModal={showModal}
+        setShowModal={setShowModal}
+        id={singleBlogId}
+      />
       {/* <LocalFaq
         showModal={showModal}
         setShowModal={setShowModal}

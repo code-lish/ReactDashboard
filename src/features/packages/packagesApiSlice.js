@@ -31,75 +31,29 @@ export const packagesApiSlice = apiSlice.injectEndpoints({
                 } else return [{ type: "Package", id: "LIST" }];
             },
         }),
-        getSingleFaq: builder.query({
-            query: (id) => ({
-                url: `/admin/faq/${id}`,
-                validateStatus: (response, result) => {
-                    return response.status === 200 && !result.isError;
-                },
-            }),
-            transformResponse: (response) => {
-                const data = [];
-                data.push(
-                    {
-                        id: response._id,
-                        question: response.question.en,
-                        answer: response.answer.en,
-                        category: response.category,
-                    },
-                    {
-                        id: 2,
-                        question: response.question.ps,
-                        answer: response.answer.ps,
-                        category: response.category,
-                    },
-                    {
-                        id: 3,
-                        question: response.question.fa,
-                        answer: response.answer.fa,
-                        category: response.category,
-                    }
-                );
-                return data;
-            },
-            providesTags: () => {
-                return [{ type: "Faq", id: "LIST" }];
-            },
-        }),
-        addFaq: builder.mutation({
+        addPackage: builder.mutation({
             query: payload => ({
-                url: '/admin/faq',
+                url: '/admin/packages',
                 method: 'POST',
                 body: {
                     ...payload,
                 }
             }),
             invalidatesTags: [
-                { type: 'Faq', id: "LIST" }
+                { type: 'Package', id: "LIST" }
             ]
         }),
-        updateFaq: builder.mutation({
-            query: ({ id, ...faq }) => {
-                console.log(faq, { faq }, { ...faq });
+        updatePackage: builder.mutation({
+            query: ({ id, ...payload }) => {
                 return {
-                    url: `/admin/faq/${id}`,
+                    url: `/admin/packages/${id}`,
                     method: "PUT",
                     body: {
-                        ...faq,
+                        ...payload.data,
                     },
                 }
             },
-            invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
-        }),
-        updateLocalFaq: builder.mutation({
-            query: ({ id, ...faq }) => ({
-                url: `/admin/faq/${id}/update-locals`,
-                method: "PUT",
-                body: {
-                    ...faq,
-                },
-            }),
-            invalidatesTags: (result, error, arg) => [{ type: "Faq", id: arg.id }],
+            invalidatesTags: (result, error, arg) => [{ type: "Package", id: arg.id }],
         }),
         deletePackage: builder.mutation({
             query: (id) => ({
@@ -110,16 +64,39 @@ export const packagesApiSlice = apiSlice.injectEndpoints({
                 { type: 'Package', id: arg.id }
             ]
         }),
+        getPackageCategories: builder.query({
+            query: () => ({
+                url: "/admin/packages/categories",
+                validateStatus: (response, result) => {
+                    return response.status === 200 && !result.isError;
+                },
+            }),
+            transformResponse: (responseData) => {
+                const loadedCategories = responseData.map((category) => {
+                    category.id = category._id;
+                    return category;
+                });
+
+                return packagesAdapter.setAll(initialState, loadedCategories);
+            },
+            providesTags: (result, error, arg) => {
+                if (result?.ids) {
+                    return [
+                        { type: "Package", id: "LIST" },
+                        ...result.ids.map((id) => ({ type: "Package", id })),
+                    ];
+                } else return [{ type: "Package", id: "LIST" }];
+            },
+        }),
     }),
 });
 
 export const {
     useGetPackagesQuery,
-    useGetSingleFaqQuery,
-    useAddFaqMutation,
-    useUpdateFaqMutation,
-    useUpdateLocalFaqMutation,
+    useAddPackageMutation,
+    useUpdatePackageMutation,
     useDeletePackageMutation,
+    useGetPackageCategoriesQuery,
 } = packagesApiSlice;
 
 // returns the query result object

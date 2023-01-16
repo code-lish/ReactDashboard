@@ -1,39 +1,35 @@
 import {
   Grid,
-  Container,
   Box,
   Typography,
   useTheme,
   TextField,
   FormControl,
-  InputAdornment,
-  IconButton,
   CircularProgress,
   Button,
   FormControlLabel,
   FormGroup,
   Checkbox,
-  OutlinedInput,
-  FormHelperText,
-  InputLabel,
-  MenuItem,
   Radio,
   RadioGroup,
   FormLabel,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import FlexBetween from "../../components/FlexBetween";
-import { useForm } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Select from "react-select";
+import { useAddPackageMutation } from "../../features/packages/packagesApiSlice";
+import PackageSchema from "../../utils/validationSchema/PackageSchema";
+import withReactContent from 'sweetalert2-react-content'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
+const MySwal = withReactContent(Swal)
+
 const CreatePackage = () => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const [province, setProvince] = useState("");
-  const [duration, setDuration] = useState("");
-  const [bandwidth, setbandwidth] = useState("");
+  const navigate = useNavigate()
 
   const provinceOptions = [
     { label: "هرات", value: "herat" },
@@ -42,6 +38,7 @@ const CreatePackage = () => {
     { label: "بادغیس", value: "badghis" },
     { label: "جلال آباد", value: "jalal-aabad" },
   ];
+
   const durationOptions = [
     { label: "ماهوار", value: 30 },
     { label: "2 ماه", value: 60 },
@@ -49,26 +46,90 @@ const CreatePackage = () => {
     { label: "6 ماه", value: 180 },
     { label: "سالانه", value: 365 },
   ];
+
   const bandwidthSignOptions = [
     { label: "کی بی", value: "1" },
     { label: "ام بی", value: "1024" },
     { label: "جی بی", value: "1048576" },
   ];
 
-  const [priority, setPriority] = useState(5);
-  const [selectPackage, setSelectPackage] = useState("sm");
+  const categoriesOption = [
+    { label: "Unlimited", value: "635d05fa4274d922cbf16779" },
+    { label: "Limited", value: "635d06094274d922cbf16780" },
+    { label: "Hybrid", value: "635d06134274d922cbf1678a" },
+    { label: "Nightly", value: "635d061c4274d922cbf16794" },
+    { label: "Free Nightly", value: "63748c7a692c0de47bd73483" },
+    { label: "Promotion", value: "63748cc3692c0de47bd73495" },
+  ];
 
   const {
     register,
     handleSubmit,
+    setValue,
     setError,
+    control,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+    resolver: yupResolver(PackageSchema),
+  });
+
+  const [addPackage, {
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  }] = useAddPackageMutation()
+
+  const isNew = useWatch({ control, name: 'isNew', defaultValue: false })
+  const packageType = useWatch({ control, name: 'type', defaultValue: 'limited' })
+  const isPackagePlus = useWatch({ control, name: 'is-package-plus', defaultValue: false })
+
+  const onSubmitHandler = async (data) => {
+    try {
+      data.category = data.category.value
+      data.duration = data.duration.value
+      data.priority = data.priority.value
+      data.province = data.province.value
+      data.isNew = isNew
+      data["is-package-plus"] = isPackagePlus && true
+
+      await addPackage(data).unwrap();
+      await MySwal.fire({
+        title: t("success"),
+        text: t("messages:success", { key: "" }),
+        icon: "success",
+        timer: 2000,
+        timerProgressBar: true,
+        showConfirmButton: false
+      })
+      reset()
+      navigate('/dashboard/packages')
+
+
+    } catch (rejectResp) {
+      const { data } = rejectResp
+
+      if (data?.errors) {
+        data.errors.forEach(error => setError(error["param"], { type: "manual", message: error["msg"] }))
+      } else {
+        MySwal.fire({
+          title: t("error"),
+          text: t("messages:failed"),
+          icon: "warning",
+          timer: 2000,
+          timerProgressBar: true,
+          showConfirmButton: false
+        })
+      }
+    }
+  }
+
   return (
     <Grid container sx={{ mt: "10px", mb: "20px" }} gap="20px">
       <Grid item xs={12} sm={7}>
-        <form onSubmit={() => console.log("handle submit")}>
+        <form onSubmit={handleSubmit(onSubmitHandler)}>
           <Box
             sx={{
               backgroundColor: theme.palette.bgColor[1000],
@@ -87,13 +148,13 @@ const CreatePackage = () => {
             >
               <FlexBetween>
                 <TextField
-                  {...register("packageName", { required: true })}
+                  {...register("name", { required: true })}
                   fullWidth
-                  id="packageName"
-                  label="package Name"
+                  id="name"
+                  label="Package Name"
                   variant="outlined"
-                  // error={errors.emailUsername ? true : false}
-                  // helperText={errors.emailUsername?.message}
+                  error={errors.name && true}
+                  helperText={errors.name?.message}
                   sx={{
                     mr: "10px",
                     "& .MuiFormLabel-root": {
@@ -103,174 +164,16 @@ const CreatePackage = () => {
                     },
                   }}
                 />
-                <FormControl
-                  fullWidth
-                  sx={{
-                    ".selector__control": {
-                      backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
-                      "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
-                      },
-                    },
-
-                    ".selector__menu": {
-                      backgroundColor: theme.palette.bgColor.main,
-                      "& > div": {
-                        "& > div": {
-                          backgroundColor: theme.palette.bgColor.main,
-                          "&:hover": {
-                            backgroundColor: theme.palette.primary[700],
-                          },
-                        },
-                      },
-                    },
-                    ".selector__single-value": {
-                      color: theme.palette.grey[900],
-                    },
-                  }}
-                >
-                  <Select
-                    value={province}
-                    onChange={setProvince}
-                    options={provinceOptions}
-                    classNamePrefix="selector"
-                  />
-                </FormControl>
-              </FlexBetween>
-              <TextField
-                {...register("linke", { required: true })}
-                fullWidth
-                id="linke"
-                label="Link"
-                variant="outlined"
-                // error={errors.emailUsername ? true : false}
-                // helperText={errors.emailUsername?.message}
-                sx={{
-                  mt: "10px",
-                  "& .MuiFormLabel-root": {
-                    "&.Mui-focused": {
-                      color: theme.palette.grey[900],
-                    },
-                  },
-                }}
-              />
-              <TextField
-                {...register("descriptions", { required: true })}
-                fullWidth
-                id="descriptions"
-                label="Discriptions"
-                variant="outlined"
-                // error={errors.emailUsername ? true : false}
-                // helperText={errors.emailUsername?.message}
-                multiline
-                sx={{
-                  mt: "10px",
-                  "& .MuiFormLabel-root": {
-                    "&.Mui-focused": {
-                      color: theme.palette.grey[900],
-                    },
-                  },
-                }}
-              />
-              <TextField
-                {...register("price", { required: true })}
-                fullWidth
-                id="price"
-                label="Price"
-                variant="outlined"
-                // error={errors.emailUsername ? true : false}
-                // helperText={errors.emailUsername?.message}
-                multiline
-                sx={{
-                  mt: "10px",
-                  "& .MuiFormLabel-root": {
-                    "&.Mui-focused": {
-                      color: theme.palette.grey[900],
-                    },
-                  },
-                }}
-              />
-              <FlexBetween sx={{ mt: "15px" }}>
-                <FormControl
-                  fullWidth
-                  sx={{
-                    ".selector__control": {
-                      backgroundColor: theme.palette.bgColor[1000],
-                      padding: "6px",
-                      borderColor: "rgba(255, 255, 255, 0.3)",
-                      "&:hover": {
-                        borderColor: "rgba(255, 255, 255, 0.9)",
-                      },
-                    },
-
-                    ".selector__menu": {
-                      backgroundColor: theme.palette.bgColor.main,
-
-                      "& > div": {
-                        "& > div": {
-                          backgroundColor: theme.palette.bgColor.main,
-
-                          "&:hover": {
-                            backgroundColor: theme.palette.primary[700],
-                          },
-                        },
-                      },
-                    },
-                    ".selector__single-value": {
-                      color: theme.palette.grey[900],
-                    },
-                  }}
-                >
-                  <Select
-                    value={duration}
-                    onChange={setDuration}
-                    options={durationOptions}
-                    classNamePrefix="selector"
-                  />
-                </FormControl>
-                <FormControl fullWidth>
-                  <InputLabel id="priority">priority</InputLabel>
-                  <Select
-                    labelId="priority"
-                    id="priority-select"
-                    value={priority}
-                    label="Priority"
-                    onChange={(e) => setPriority(e.target.value)}
-                  >
-                    <MenuItem value={5}>Herat</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-              </FlexBetween>
-              <FlexBetween sx={{ mt: "15px" }}>
-                <FormControl fullWidth sx={{ mr: "10px" }}>
-                  <InputLabel id="selectPackage">select Package</InputLabel>
-                  <Select
-                    labelId="selectPackage"
-                    id="selectPackage-select"
-                    value={selectPackage}
-                    label="Select package"
-                    onChange={(e) => setSelectPackage(e.target.value)}
-                  >
-                    <MenuItem value={"sm"}>Herat</MenuItem>
-                    <MenuItem value={20}>Twenty</MenuItem>
-                    <MenuItem value={30}>Thirty</MenuItem>
-                  </Select>
-                </FormControl>
-
                 <TextField
-                  {...register("index", { required: true })}
+                  {...register("slug", { required: true })}
                   fullWidth
-                  id="index"
-                  label="Index"
+                  id="slug"
+                  label="Package Slug"
                   variant="outlined"
-                  // error={errors.emailUsername ? true : false}
-                  // helperText={errors.emailUsername?.message}
-                  multiline
+                  error={errors.slug && true}
+                  helperText={errors.slug?.message}
                   sx={{
+                    mr: "10px",
                     "& .MuiFormLabel-root": {
                       "&.Mui-focused": {
                         color: theme.palette.grey[900],
@@ -279,7 +182,273 @@ const CreatePackage = () => {
                   }}
                 />
               </FlexBetween>
+              <FlexBetween>
+                <TextField
+                  {...register("price", { required: true })}
+                  fullWidth
+                  id="price"
+                  label="Package Price"
+                  variant="outlined"
+                  error={errors.price && true}
+                  helperText={errors.price?.message}
+                  sx={{
+                    mr: "10px",
+                    mt: "20px",
+                    "& .MuiFormLabel-root": {
+                      "&.Mui-focused": {
+                        color: theme.palette.grey[900],
+                      },
+                    },
+                  }}
+                />
+                <FormControl
+                  fullWidth
+                  sx={{
+                    ".selector__control": {
+                      backgroundColor: theme.palette.bgColor[1000],
+                      padding: "6px",
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      "&:hover": {
+                        borderColor: "rgba(255, 255, 255, 0.9)",
+                      },
+                    },
+
+                    ".selector__menu": {
+                      backgroundColor: theme.palette.bgColor.main,
+                      "& > div": {
+                        "& > div": {
+                          backgroundColor: theme.palette.bgColor.main,
+                          "&:hover": {
+                            backgroundColor: theme.palette.primary[700],
+                          },
+                        },
+                      },
+                    },
+                    ".selector__single-value": {
+                      color: theme.palette.grey[900],
+                    },
+                  }}
+                >
+                  <Controller
+                    name="province"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Select
+                          controlShouldRenderValue={true}
+                          options={provinceOptions}
+                          id="province"
+                          name="province"
+                          placeholder={t("province")}
+                          className={`form-multi-select react-select ${errors.province && "is-invalid"}`}
+                          classNamePrefix="select"
+                          errorText={true}
+                          aria-invalid={errors.province && true}
+                          aria-errormessage="province-invalid"
+                          {...field}
+                        />
+                      );
+                    }}
+                  />
+                </FormControl>
+              </FlexBetween>
+              {isPackagePlus && <TextField
+                {...register("plus-price", { required: true })}
+                fullWidth
+                id="plus-price"
+                label="Package Plus Price"
+                variant="outlined"
+                error={errors["plus-price"] && true}
+                helperText={errors["plus-price"]?.message}
+                sx={{
+                  mt: "10px",
+                  "& .MuiFormLabel-root": {
+                    "&.Mui-focused": {
+                      color: theme.palette.grey[900],
+                    },
+                  },
+                }}
+              />
+              }
+              <FlexBetween>
+                <FormControl
+                  fullWidth
+                  sx={{
+                    ".selector__control": {
+                      backgroundColor: theme.palette.bgColor[1000],
+                      padding: "6px",
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      "&:hover": {
+                        borderColor: "rgba(255, 255, 255, 0.9)",
+                      },
+                    },
+
+                    ".selector__menu": {
+                      backgroundColor: theme.palette.bgColor.main,
+                      "& > div": {
+                        "& > div": {
+                          backgroundColor: theme.palette.bgColor.main,
+                          "&:hover": {
+                            backgroundColor: theme.palette.primary[700],
+                          },
+                        },
+                      },
+                    },
+                    ".selector__single-value": {
+                      color: theme.palette.grey[900],
+                    },
+                  }}
+                >
+                  <Controller
+                    name="duration"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Select
+                          controlShouldRenderValue={true}
+                          options={durationOptions}
+                          id="duration"
+                          name="duration"
+                          placeholder={t("Duration")}
+                          className={`form-multi-select react-select ${errors.duration && "is-invalid"}`}
+                          classNamePrefix="select"
+                          errorText={true}
+                          aria-invalid={errors.duration && true}
+                          aria-errormessage="duration-invalid"
+                          {...field}
+                        />
+                      );
+                    }}
+                  />
+                </FormControl>
+                {packageType === 'limited' && <TextField
+                  {...register("bandwidth", { required: true })}
+                  fullWidth
+                  id="bandwidth"
+                  label="Package bandwidth"
+                  variant="outlined"
+                  error={errors.bandwidth && true}
+                  helperText={errors.bandwidth?.message}
+                  sx={{
+                    mr: "10px",
+                    mt: "20px",
+                    "& .MuiFormLabel-root": {
+                      "&.Mui-focused": {
+                        color: theme.palette.grey[900],
+                      },
+                    },
+                  }}
+                />
+                }
+
+              </FlexBetween>
+
+              <FlexBetween sx={{ mt: "15px" }}>
+                <FormControl
+                  fullWidth
+                  sx={{
+                    ".selector__control": {
+                      backgroundColor: theme.palette.bgColor[1000],
+                      padding: "6px",
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      "&:hover": {
+                        borderColor: "rgba(255, 255, 255, 0.9)",
+                      },
+                    },
+
+                    ".selector__menu": {
+                      backgroundColor: theme.palette.bgColor.main,
+                      "& > div": {
+                        "& > div": {
+                          backgroundColor: theme.palette.bgColor.main,
+                          "&:hover": {
+                            backgroundColor: theme.palette.primary[700],
+                          },
+                        },
+                      },
+                    },
+                    ".selector__single-value": {
+                      color: theme.palette.grey[900],
+                    },
+                  }}
+                >
+                  <Controller
+                    name="category"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Select
+                          name="category"
+                          cacheOptions
+                          defaultOptions
+                          id="category"
+                          placeholder={t("Category")}
+                          noResultsText={t("no-info")}
+                          isClearable={true}
+                          options={categoriesOption}
+                          className={`form-multi-select react-select ${errors.category && " is-invalid"}`}
+                          classNamePrefix="select"
+                          errorText={true}
+                          aria-invalid={errors.category && true}
+                          {...field}
+                        />
+                      );
+                    }}
+                  />
+                </FormControl>
+                <FormControl
+                  fullWidth
+                  sx={{
+                    ".selector__control": {
+                      backgroundColor: theme.palette.bgColor[1000],
+                      padding: "6px",
+                      borderColor: "rgba(255, 255, 255, 0.3)",
+                      "&:hover": {
+                        borderColor: "rgba(255, 255, 255, 0.9)",
+                      },
+                    },
+
+                    ".selector__menu": {
+                      backgroundColor: theme.palette.bgColor.main,
+                      "& > div": {
+                        "& > div": {
+                          backgroundColor: theme.palette.bgColor.main,
+                          "&:hover": {
+                            backgroundColor: theme.palette.primary[700],
+                          },
+                        },
+                      },
+                    },
+                    ".selector__single-value": {
+                      color: theme.palette.grey[900],
+                    },
+                  }}
+                >
+                  <Controller
+                    name="priority"
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Select
+                          controlShouldRenderValue={true}
+                          options={[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(no => ({ label: no, value: no }))}
+                          id="priority"
+                          name="priority"
+                          placeholder={t("Priority")}
+                          className={`form-multi-select react-select ${errors.priority && "is-invalid"}`}
+                          classNamePrefix="select"
+                          errorText={true}
+                          aria-invalid={errors.priority && true}
+                          aria-errormessage="priority-invalid"
+                          {...field}
+                        />
+                      );
+                    }}
+                  />
+                </FormControl>
+              </FlexBetween>
             </Box>
+
             <Box
               sx={{
                 p: "20px",
@@ -288,42 +457,82 @@ const CreatePackage = () => {
               <Typography variant="body1" sx={{ pb: "10px", pl: "-10px" }}>
                 Speed INfo
               </Typography>
-              <FlexBetween>
-                <TextField
-                  {...register("daySpeed", { required: true })}
-                  fullWidth
-                  id="daySpeed"
-                  label="Day Speed"
-                  variant="outlined"
-                  // error={errors.emailUsername ? true : false}
-                  // helperText={errors.emailUsername?.message}
-                  sx={{
-                    mr: "10px",
-                    "& .MuiFormLabel-root": {
-                      "&.Mui-focused": {
-                        color: theme.palette.grey[900],
+              {packageType === "limited"
+                ?
+                <FlexBetween>
+                  <TextField
+                    {...register("dailyVolume", { required: true })}
+                    fullWidth
+                    id="dailyVolume"
+                    label="Speed after daily volume"
+                    variant="outlined"
+                    // error={errors.emailUsername ? true : false}
+                    // helperText={errors.emailUsername?.message}
+                    sx={{
+                      mr: "10px",
+                      "& .MuiFormLabel-root": {
+                        "&.Mui-focused": {
+                          color: theme.palette.grey[900],
+                        },
                       },
-                    },
-                  }}
-                />
-                <TextField
-                  {...register("night Speed", { required: true })}
-                  fullWidth
-                  id="night Speed"
-                  label="night  Speed"
-                  variant="outlined"
-                  // error={errors.emailUsername ? true : false}
-                  // helperText={errors.emailUsername?.message}
-                  sx={{
-                    mr: "10px",
-                    "& .MuiFormLabel-root": {
-                      "&.Mui-focused": {
-                        color: theme.palette.grey[900],
+                    }}
+                  />
+                  <TextField
+                    {...register("capacity", { required: true })}
+                    fullWidth
+                    id="capacity"
+                    label="Package capacity"
+                    variant="outlined"
+                    error={errors.capacity && true}
+                    helperText={errors.capacity?.message}
+                    sx={{
+                      mr: "10px",
+                      "& .MuiFormLabel-root": {
+                        "&.Mui-focused": {
+                          color: theme.palette.grey[900],
+                        },
                       },
-                    },
-                  }}
-                />
-              </FlexBetween>
+                    }}
+                  />
+                </FlexBetween>
+                :
+                <FlexBetween>
+                  <TextField
+                    {...register("daySpeed", { required: true })}
+                    fullWidth
+                    id="daySpeed"
+                    label="Day Speed"
+                    variant="outlined"
+                    // error={errors.emailUsername ? true : false}
+                    // helperText={errors.emailUsername?.message}
+                    sx={{
+                      mr: "10px",
+                      "& .MuiFormLabel-root": {
+                        "&.Mui-focused": {
+                          color: theme.palette.grey[900],
+                        },
+                      },
+                    }}
+                  />
+                  <TextField
+                    {...register("night Speed", { required: true })}
+                    fullWidth
+                    id="night Speed"
+                    label="night  Speed"
+                    variant="outlined"
+                    // error={errors.emailUsername ? true : false}
+                    // helperText={errors.emailUsername?.message}
+                    sx={{
+                      mr: "10px",
+                      "& .MuiFormLabel-root": {
+                        "&.Mui-focused": {
+                          color: theme.palette.grey[900],
+                        },
+                      },
+                    }}
+                  />
+                </FlexBetween>
+              }
               <Box display="flex" alignItems="center">
                 <Box sx={{ position: "relative", mt: "20px" }}>
                   <Button
@@ -338,12 +547,12 @@ const CreatePackage = () => {
                         backgroundColor: theme.palette.primary[400],
                       },
                     }}
-                    disabled={false}
+                    disabled={isSubmitting}
                     fullWidth
                   >
                     {" "}
                     Submit
-                    {
+                    {isSubmitting &&
                       <CircularProgress
                         size={24}
                         sx={{
@@ -377,6 +586,7 @@ const CreatePackage = () => {
                 </Button>
               </Box>
             </Box>
+
           </Box>
         </form>
       </Grid>
@@ -394,43 +604,6 @@ const CreatePackage = () => {
           <Typography variant="body1" sx={{ pb: "10px", pl: "-10px" }}>
             Choices
           </Typography>
-
-          <FormControl
-            fullWidth
-            sx={{
-              ".selector__control": {
-                backgroundColor: theme.palette.bgColor[1000],
-                padding: "6px",
-                borderColor: "rgba(255, 255, 255, 0.3)",
-                "&:hover": {
-                  borderColor: "rgba(255, 255, 255, 0.9)",
-                },
-              },
-
-              ".selector__menu": {
-                backgroundColor: theme.palette.bgColor.main,
-                "& > div": {
-                  "& > div": {
-                    backgroundColor: theme.palette.bgColor.main,
-                    "&:hover": {
-                      backgroundColor: theme.palette.primary[700],
-                    },
-                  },
-                },
-              },
-              ".selector__single-value": {
-                color: theme.palette.grey[900],
-              },
-            }}
-          >
-            <Select
-              value={bandwidth}
-              onChange={setbandwidth}
-              options={bandwidthSignOptions}
-              classNamePrefix="selector"
-            />
-          </FormControl>
-
           <Box sx={{ mt: "10px" }}>
             <FormControl>
               <FormLabel id="type-of-bandwidth">Type of package</FormLabel>
@@ -443,12 +616,39 @@ const CreatePackage = () => {
                 <FormControlLabel
                   value="limited"
                   control={<Radio />}
-                  label="lmited"
+                  label="limited"
+                  {...register('type')}
                 />
                 <FormControlLabel
-                  value="none-limited"
+                  value="unlimited"
                   control={<Radio />}
-                  label="none-limited"
+                  label="unlimited"
+                  {...register('type')}
+                />
+              </RadioGroup>
+            </FormControl>
+          </Box>
+
+          <Box sx={{ mt: "10px" }}>
+            <FormControl>
+              <FormLabel id="type-of-bandwidth">Type of Bandwidth</FormLabel>
+              <RadioGroup
+                row
+                aria-labelledby="type-of-bandwidth"
+                defaultValue="dedicated"
+                name="bandwidth-type"
+              >
+                <FormControlLabel
+                  value="dedicated"
+                  control={<Radio />}
+                  label="Dedicated"
+                  {...register('bandwidth-type')}
+                />
+                <FormControlLabel
+                  value="shared"
+                  control={<Radio />}
+                  label="Shared"
+                  {...register('bandwidth-type')}
                 />
               </RadioGroup>
             </FormControl>
@@ -457,12 +657,22 @@ const CreatePackage = () => {
           <Box sx={{ mt: "10px" }}>
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Pluse package"
+                control={<Checkbox />}
+                label="Plus package"
+                id="is-package-plus"
+                name="is-package-plus"
+                {...register('is-package-plus')}
               />
               <FormControlLabel
                 control={<Checkbox />}
                 label="Combined package"
+              />
+              <FormControlLabel
+                control={<Checkbox />}
+                label="Is New?"
+                name="isNew"
+                id="isNew"
+                {...register('isNew')}
               />
             </FormGroup>
           </Box>

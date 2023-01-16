@@ -10,7 +10,6 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import "./index.css";
 import "./config/i18n";
 import "react-toastify/dist/ReactToastify.css";
-import "./assets/sass/index.scss"
 import Loader from "./components/common/Loader";
 
 const container = document.getElementById("root");

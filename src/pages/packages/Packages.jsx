@@ -154,9 +154,8 @@ const Packages = () => {
         field: "price",
         headerName: "Price",
         valueFormatter: ({ value }) => {
-          return `${value?.main} | ${
-            value?.plus !== undefined ? value?.plus : "none"
-          }`;
+          return `${value?.main} | ${value?.plus !== undefined ? value?.plus : "none"
+            }`;
         },
         flex: 1,
         type: "string",
@@ -167,7 +166,7 @@ const Packages = () => {
           return value[0]?.en;
         },
 
-        headerName: "duration",
+        headerName: "properties",
         flex: 2,
         type: "string",
       },
@@ -215,10 +214,29 @@ const Packages = () => {
         type: "actions",
         flex: 2,
         getActions: (params) => [
+          // <GridActionsCellItem
+          //   icon={
+          //     <Tooltip
+          //       title="Change language"
+          //       PopperProps={{
+          //         sx: {
+          //           "& .MuiTooltip-tooltip": {
+          //             backgroundColor: theme.palette.grey[800],
+          //             color: theme.palette.grey[200],
+          //           },
+          //         },
+          //       }}
+          //     >
+          //       <LanguageOutlined />
+          //     </Tooltip>
+          //   }
+          //   label="Language"
+          //   onClick={() => handleLocalFaq(params.id)}
+          // />,
           <GridActionsCellItem
             icon={
               <Tooltip
-                title="Change language"
+                title="Edit"
                 PopperProps={{
                   sx: {
                     "& .MuiTooltip-tooltip": {
@@ -228,11 +246,11 @@ const Packages = () => {
                   },
                 }}
               >
-                <LanguageOutlined />
+                <ModeEditOutlined />
               </Tooltip>
             }
-            label="Language"
-            onClick={() => handleLocalFaq(params.id)}
+            label="Edit"
+            onClick={() => navigate(`edit/${params.id}`)}
           />,
           <GridActionsCellItem
             icon={
@@ -257,44 +275,25 @@ const Packages = () => {
             label="Delete"
             onClick={() => deleteHandler(params.id)}
           />,
-          <GridActionsCellItem
-            icon={
-              <Tooltip
-                title="Edit"
-                PopperProps={{
-                  sx: {
-                    "& .MuiTooltip-tooltip": {
-                      backgroundColor: theme.palette.grey[800],
-                      color: theme.palette.grey[200],
-                    },
-                  },
-                }}
-              >
-                <ModeEditOutlined />
-              </Tooltip>
-            }
-            label="Edit"
-            onClick={() => handleEditFaq(params.id)}
-          />,
-          <GridActionsCellItem
-            icon={
-              <Tooltip
-                title="Read More"
-                PopperProps={{
-                  sx: {
-                    "& .MuiTooltip-tooltip": {
-                      backgroundColor: theme.palette.grey[800],
-                      color: theme.palette.grey[200],
-                    },
-                  },
-                }}
-              >
-                <ReadMoreOutlined />
-              </Tooltip>
-            }
-            label="Read More"
-            onClick={() => navigate(`/dashboard/faq/${params.id}`)}
-          />,
+          // <GridActionsCellItem
+          //   icon={
+          //     <Tooltip
+          //       title="Read More"
+          //       PopperProps={{
+          //         sx: {
+          //           "& .MuiTooltip-tooltip": {
+          //             backgroundColor: theme.palette.grey[800],
+          //             color: theme.palette.grey[200],
+          //           },
+          //         },
+          //       }}
+          //     >
+          //       <ReadMoreOutlined />
+          //     </Tooltip>
+          //   }
+          //   label="Read More"
+          //   onClick={() => navigate(`/dashboard/faq/${params.id}`)}
+          // />,
         ],
       },
     ],
@@ -307,7 +306,7 @@ const Packages = () => {
 
       <Box m="15px">
         <Header title="Internet Packages" subtitle="All Packages" />
-        <Button onClick={() => navigate("/dashboard/create-package")}>
+        <Button onClick={() => navigate("create")}>
           Create Package
         </Button>
         <Box

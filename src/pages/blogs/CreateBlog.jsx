@@ -16,6 +16,7 @@ import { useAddBlogMutation } from "../../features/blog/blogApiSlice";
 import { selectBlogById } from "../../features/blog/blogApiSlice";
 import { useSelector } from "react-redux";
 import FlexBetween from "../../components/FlexBetween";
+
 const CreateBlog = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
   const [title, setTitle] = useState("");
@@ -62,22 +63,19 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (question.trim() && answer.trim()) {
-    await addBlog({
-      id,
-      title,
-      slug,
-      content,
-      excerpt,
-      image: selectedFile,
-      categories,
-      status,
-    });
+
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('slug', slug)
+    formData.append('content', content)
+    formData.append('excerpt', excerpt)
+    formData.append('image', selectedFile)
+    formData.append('status', status)
+    await addBlog(formData);
+
     setShowModal(false);
     setSelectedFile(undefined);
     setPreview(undefined);
-
-    // }
   };
 
   return (
@@ -113,6 +111,7 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
               id="slug"
               label="slug"
               type="text"
+              onChange={(e) => setSlug(e.target.value)}
               multiline
               fullWidth
               variant="standard"

@@ -11,16 +11,13 @@ import {
 import { useUpdateFaqMutation } from "../../features/faq/faqApiSlice";
 import { selectFaqById } from "../../features/faq/faqApiSlice";
 import { useSelector } from "react-redux";
+
 const EditFaq = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
   const faq = useSelector((state) => selectFaqById(state, id));
 
-  const [question, setQuestion] = useState(
-    ''
-  );
-  const [answer, setAnswer] = useState(
-    ''
-  );
+  const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
 
   const [updateFaq, { isLoading, isSuccess, isError, error }] =
     useUpdateFaqMutation();
@@ -44,14 +41,14 @@ const EditFaq = ({ showModal, setShowModal, id }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault()
-    // if (question.trim() && answer.trim()) {
+
     await updateFaq({
       id,
       question: question === undefined ? faq?.question?.fa : question,
       answer: answer === undefined ? faq?.answer?.fa : answer
     });
+
     setShowModal(false)
-    // }
   };
 
   return (

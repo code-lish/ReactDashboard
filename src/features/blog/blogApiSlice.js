@@ -71,20 +71,16 @@ export const blogApiSlice = apiSlice.injectEndpoints({
       query: (payload) => ({
         url: "/admin/blog",
         method: "POST",
-        body: {
-          ...payload,
-        },
+        body: payload,
       }),
       invalidatesTags: [{ type: "Blog", id: "LIST" }],
     }),
     updateBlog: builder.mutation({
-      query: ({ id, ...blog }) => {
+      query: payload => {
         return {
-          url: `/admin/blog/${id}`,
+          url: `/admin/blog/${payload.id}`,
           method: "PUT",
-          body: {
-            ...blog,
-          },
+          body: payload.formData,
         };
       },
       invalidatesTags: (result, error, arg) => [{ type: "Blog", id: arg.id }],

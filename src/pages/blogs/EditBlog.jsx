@@ -88,20 +88,17 @@ const EditBlog = ({ showModal, setShowModal, id }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // if (question.trim() && answer.trim()) {
-    await updateBlog({
-      id,
-      title,
-      slug,
-      content,
-      excerpt,
-      image: selectedFile,
-      categories,
-      status,
-    });
-    setShowModal(false);
 
-    // }
+    const formData = new FormData()
+    formData.append('title', title)
+    formData.append('slug', slug)
+    formData.append('content', content)
+    formData.append('excerpt', excerpt)
+    formData.append('image', selectedFile)
+    formData.append('status', status)
+
+    await updateBlog({ id, formData });
+    setShowModal(false);
   };
 
   return (

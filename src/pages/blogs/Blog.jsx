@@ -39,8 +39,6 @@ const Blog = () => {
   const blogs = useSelector(selectAllBlogs);
   const [pageSize, setPageSize] = useState(10);
 
-  console.log("Blogssssssss", blogs);
-
   const handleEditBlog = (id) => {
     setShowModal("edit");
     setSinglBlogId(id);

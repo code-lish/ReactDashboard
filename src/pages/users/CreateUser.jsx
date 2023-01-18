@@ -48,7 +48,6 @@ const CreateUser = () => {
     const subjectsOption = [
         { value: "humanResources", label: "Human Resources" },
         { value: "media", label: "Media" },
-        { value: "chat", label: "Chat" },
         { value: "technical", label: "Technical" },
         { value: "finance", label: "Finance" },
     ];
@@ -76,6 +75,12 @@ const CreateUser = () => {
         defaultValue: true,
     });
 
+    const canChat = useWatch({
+        control,
+        name: "canChat",
+        defaultValue: false,
+    });
+
     const [addUser, { isLoading, isSuccess, isError, error }] =
         useAddUserMutation();
 
@@ -90,13 +95,13 @@ const CreateUser = () => {
     }
 
     const onSubmitHandler = async (data) => {
-
         try {
             data.image = attachmentsFile
             data.gender = data.gender?.value
             data.role = data?.subject?.value
             data.ability = data?.ability?.map(ability => ability.value).join(',')
             data.isActive = isActive
+            data.canChat = canChat
 
             const formData = new FormData()
             for (const property in data) {
@@ -438,6 +443,7 @@ const CreateUser = () => {
 
                             <FormGroup>
                                 <FormControlLabel {...register("isActive")} control={<Switch defaultChecked />} label="IsActive" />
+                                <FormControlLabel {...register("canChat")} control={<Switch />} label="Is Able To Chat?" />
                             </FormGroup>
 
                             <FlexBetween sx={{ mt: "20px" }}>

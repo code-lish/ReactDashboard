@@ -31,6 +31,9 @@ const Blog = lazy(() => import("./pages/blogs/Blog"));
 const SingleBlog = lazy(() => import("./pages/blogs/SingelBlog"));
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 const EditPackage = lazy(() => import("./pages/packages/EditPackage"));
+const User = lazy(() => import("./pages/users/User"));
+const CreateUser = lazy(() => import("./pages/users/CreateUser"));
+const EditUser = lazy(() => import("./pages/users/EditUser"));
 
 const App = () => {
   const router = createBrowserRouter(
@@ -57,11 +60,17 @@ const App = () => {
                 <Route index element={<Packages />} />
                 <Route path="create" element={<CreatePackage />} />
                 <Route path="edit/:id" element={<EditPackage />} />
-
               </Route>
 
               <Route path="blogs" element={<Blog />} />
               <Route path="blogs/:id" element={<SingleBlog />} />
+
+              <Route path="users" >
+                <Route index element={<User />} />
+                <Route path="create" element={<CreateUser />} />
+                <Route path="edit/:id" element={<EditUser />} />
+              </Route>
+
             </Route>
           </Route>
         </Route>

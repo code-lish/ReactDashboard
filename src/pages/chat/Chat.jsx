@@ -113,6 +113,7 @@ const Chat = () => {
 
         {/* Messges */}
         <Grid
+          className="scrollbar"
           xs={10}
           lg={8}
           sx={{

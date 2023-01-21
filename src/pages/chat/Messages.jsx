@@ -78,6 +78,7 @@ const Messages = () => {
           px: "10px",
           position: "absolute",
           bottom: "0",
+          // left: "0",
           width: "95%",
           borderRadius: "20px",
           py: "5px",
@@ -103,11 +104,11 @@ const Messages = () => {
       </Box>
 
       <Box
-        className="messages-container"
+        className="messages-container "
         display="flex"
         flexDirection="column"
         gap="10px"
-        sx={{ p: "20px" }}
+        sx={{ p: "20px", overflowY: "scroll", height: "70vh" }}
       >
         {/* Messages sent to user */}
         <Box className="sender" alignSelf="end">

@@ -21,6 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FlexBetween from "../../components/FlexBetween";
 import { useTranslation } from "react-i18next";
 import Select from "react-select";
+import { toast } from 'react-toastify'
 
 const CreateBlog = ({ showModal, setShowModal, id }) => {
   const theme = useTheme();
@@ -39,17 +40,8 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
     { label: "pending", value: "pending" },
   ];
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    setError,
-    control,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm({
-    mode: "onChange",
-    resolver: yupResolver(),
+  const { control, reset } = useForm({
+    mode: "onChange"
   });
 
   const status = useWatch({
@@ -74,6 +66,26 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
+  useEffect(() => {
+    if (isError) {
+      if (error?.data?.errors) {
+        error?.data.errors.forEach((error) => {
+          return toast.error(error?.msg, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        );
+      }
+    }
+  }, [error, isError]);
+
   const onSelectFile = (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setSelectedFile(undefined);
@@ -93,20 +105,28 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("slug", slug);
+      formData.append("content", content);
+      formData.append("excerpt", excerpt);
+      formData.append("image", selectedFile);
+      formData.append("status", status.value);
 
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("slug", slug);
-    formData.append("content", content);
-    formData.append("excerpt", excerpt);
-    formData.append("image", selectedFile);
-    formData.append("status", status);
-    await addBlog(formData);
-
-    setShowModal(false);
-    setSelectedFile(undefined);
-    setPreview(undefined);
-  };
+      await addBlog(formData).unwrap();
+      setShowModal(false);
+      setSelectedFile(undefined);
+      setPreview(undefined);
+      setPreview(undefined);
+      setTitle('');
+      setSlug('');
+      setExcerpt('');
+      setContent('');
+    } catch (error) {
+      console.log('error');
+    };
+  }
 
   return (
     <div>
@@ -170,7 +190,7 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
             variant="standard"
           />
 
-          <TextField
+          {/* <TextField
             autoFocus
             margin="dense"
             id="categories"
@@ -180,7 +200,7 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
             multiline
             fullWidth
             variant="standard"
-          />
+          /> */}
           <FormControl
             fullWidth
             sx={{
@@ -226,12 +246,11 @@ const CreateBlog = ({ showModal, setShowModal, id }) => {
                     id="status"
                     name="status"
                     placeholder={t("Status")}
-                    className={`form-multi-select react-select ${
-                      errors.status && "is-invalid"
-                    }`}
+                    // className={`form-multi-select react-select ${errors.status && "is-invalid"
+                    //   }`}
                     classNamePrefix="select"
                     errorText={true}
-                    aria-invalid={errors.status && true}
+                    // aria-invalid={errors.status && true}
                     aria-errormessage="status-invalid"
                     {...field}
                   />

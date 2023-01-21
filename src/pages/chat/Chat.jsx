@@ -14,7 +14,6 @@ import FlexBetween from "../../components/FlexBetween";
 import profile from "../../assets/img/profile.jpeg";
 import { Search } from "@mui/icons-material";
 import Contact from "./Contact";
-import ChatContact from "./ChatContact";
 import Messages from "./Messages";
 const Chat = () => {
   const theme = useTheme();
@@ -87,27 +86,8 @@ const Chat = () => {
               Chats
             </Typography>
 
-            <ChatContact hasMessage={true} />
-            <ChatContact hasMessage={false} />
-
-            <Typography
-              variant="h4"
-              sx={{
-                color: theme.palette.primary.main,
-                fontWeight: "bold",
-                py: "15px",
-                px: "10px",
-                fontSize: {
-                  xs: "11px",
-                  md: "20px",
-                },
-              }}
-            >
-              Contacts
-            </Typography>
-
-            <Contact />
-            <Contact />
+            <Contact hasMessage={true} />
+            <Contact hasMessage={false} />
           </Box>
         </Grid>
 

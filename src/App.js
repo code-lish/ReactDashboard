@@ -33,13 +33,7 @@ const Blog = lazy(() => import("./pages/blogs/Blog"));
 const SingleBlog = lazy(() => import("./pages/blogs/SingelBlog"));
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
 const EditPackage = lazy(() => import("./pages/packages/EditPackage"));
-<<<<<<< HEAD
 const Chat = lazy(() => import("./pages/chat/Chat"));
-=======
-const User = lazy(() => import("./pages/users/User"));
-const CreateUser = lazy(() => import("./pages/users/CreateUser"));
-const EditUser = lazy(() => import("./pages/users/EditUser"));
->>>>>>> e889d2b5f496b78fc6dc74b560240695aeee7898
 
 const App = () => {
   const router = createBrowserRouter(
@@ -56,34 +50,49 @@ const App = () => {
           <Route element={<Prefetch />}>
             <Route path="/dashboard" element={<Layout />}>
               <Route index element={<Dashboard />} />
-              <Route path="faq" element={
-                <Protected role="media">
-                  <Faq />
-                </Protected>
-              } />
-              <Route path="faq/:id" element={
-                <Protected role="media">
-                  <SingleFaq />
-                </Protected>} />
-              <Route path="contact-us" element={
-                <Protected>
-                  <ContactUS />
-                </Protected>
-              } />
-              <Route path="package-services" element={
-                <Protected role="sales">
-                  <PackageService />
-                </Protected>
-              } />
+              <Route
+                path="faq"
+                element={
+                  <Protected role="media">
+                    <Faq />
+                  </Protected>
+                }
+              />
+              <Route
+                path="faq/:id"
+                element={
+                  <Protected role="media">
+                    <SingleFaq />
+                  </Protected>
+                }
+              />
+              <Route
+                path="contact-us"
+                element={
+                  <Protected>
+                    <ContactUS />
+                  </Protected>
+                }
+              />
+              <Route
+                path="package-services"
+                element={
+                  <Protected role="sales">
+                    <PackageService />
+                  </Protected>
+                }
+              />
 
-              <Route path="jobs" element={
-                <Protected>
-                  <Job />
-                </Protected>
-              } />
+              <Route
+                path="jobs"
+                element={
+                  <Protected>
+                    <Job />
+                  </Protected>
+                }
+              />
 
               <Route path="packages">
-<<<<<<< HEAD
                 <Route index element={<Packages />} />
                 <Route path="create" element={<CreatePackage />} />
                 <Route path="edit/:id" element={<EditPackage />} />
@@ -93,54 +102,6 @@ const App = () => {
               <Route path="blogs/:id" element={<SingleBlog />} />
 
               <Route path="chat" element={<Chat />} />
-=======
-                <Route index element={
-                  <Protected role="sales">
-                    <Packages />
-                  </Protected>
-                } />
-                <Route path="create" element={
-                  <Protected role="sales">
-                    <CreatePackage />
-                  </Protected>
-                } />
-                <Route path="edit/:id" element={
-                  <Protected role="sales">
-                    <EditPackage />
-                  </Protected>
-                } />
-              </Route>
-
-              <Route path="blogs" element={
-                <Protected role="media">
-                  <Blog />
-                </Protected>
-              } />
-              <Route path="blogs/:id" element={
-                <Protected role="media">
-                  <SingleBlog />
-                </Protected>
-              } />
-
-              <Route path="users">
-                <Route index element={
-                  <Protected>
-                    <User />
-                  </Protected>
-                } />
-                <Route path="create" element={
-                  <Protected>
-                    <CreateUser />
-                  </Protected>
-                } />
-                <Route path="edit/:id" element={
-                  <Protected>
-                    <EditUser />
-                  </Protected>
-                } />
-              </Route>
-
->>>>>>> e889d2b5f496b78fc6dc74b560240695aeee7898
             </Route>
           </Route>
         </Route>

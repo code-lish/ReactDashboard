@@ -62,13 +62,14 @@ const Login = () => {
   const onSubmitHandler = async (data) => {
     try {
       const userData = await login(data).unwrap()
+      console.log(userData);
       dispatch(setCredentials({ userData }))
       navigate('/dashboard')
       reset()
 
     } catch (rejectResp) {
       const { data } = rejectResp
-
+      console.log(data);
       if (data?.errors) {
         data.errors.forEach(error => setError(error["param"], { type: "manual", message: error["msg"] }))
       } else {

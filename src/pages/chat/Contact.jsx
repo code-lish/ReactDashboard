@@ -1,7 +1,7 @@
 import { Box, Typography, Avatar, Badge, useTheme } from "@mui/material";
 import profile from "../../assets/img/profile.jpeg";
-
-const Contact = () => {
+import FlexBetween from "../../components/FlexBetween";
+const Contact = ({ hasMessage }) => {
   const theme = useTheme();
   return (
     <Box
@@ -36,19 +36,30 @@ const Contact = () => {
           },
         }}
       >
-        <Typography
-          variant="h5"
-          sx={{ fontWeight: "600", color: theme.palette.grey[900] }}
-        >
-          Sara Sussan
-        </Typography>
-
-        <Typography
-          variant="body1"
-          sx={{ color: theme.palette.grey[800], fontWeight: "bold" }}
-        >
-          about me message
-        </Typography>
+        <FlexBetween>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "600", color: theme.palette.grey[900] }}
+          >
+            Sara Sussan
+          </Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.grey[800] }}>
+            19 jan
+          </Typography>
+        </FlexBetween>
+        <FlexBetween>
+          <Typography
+            variant="body1"
+            sx={{ color: theme.palette.grey[800], fontWeight: "bold" }}
+          >
+            Last messagefadss
+          </Typography>
+          {hasMessage && (
+            <Box sx={{ mr: "10px" }}>
+              <Badge badgeContent={4} color="error"></Badge>
+            </Box>
+          )}
+        </FlexBetween>
       </Box>
     </Box>
   );

@@ -16,6 +16,7 @@ import { useEffect, useRef } from "react";
 import { useGetMessagesQuery } from "../../features/chat/messageApiSlice";
 import { useSelector } from 'react-redux'
 import MessageItem from "./MessageItem";
+import ChatForm from "./ChatForm";
 
 const Messages = ({ chatId }) => {
   const theme = useTheme();
@@ -106,37 +107,7 @@ const Messages = ({ chatId }) => {
         </FlexBetween>
         <Divider />
 
-        <Box
-          sx={{
-            backgroundColor: theme.palette.bgColor[1000],
-            mx: "10px",
-            px: "10px",
-            position: "absolute",
-            bottom: "0",
-            // left: "0",
-            width: "95%",
-            borderRadius: "20px",
-            py: "5px",
-          }}
-        >
-          <Box display="flex" alignItems="center">
-            <Box flexGrow={1}>
-              <InputBase
-                placeholder="Type your message here..."
-                sx={{ ml: "5px", fontWeight: "bold" }}
-                fullWidth
-              />
-            </Box>
-            <FlexBetween>
-              <IconButton>
-                <Call sx={{ color: theme.palette.grey[800] }} />
-              </IconButton>
-              <IconButton>
-                <KeyboardVoice sx={{ color: theme.palette.grey[800] }} />
-              </IconButton>
-            </FlexBetween>
-          </Box>
-        </Box>
+        <ChatForm chatId={chatId} />
 
         <Box
           className="messages-container "

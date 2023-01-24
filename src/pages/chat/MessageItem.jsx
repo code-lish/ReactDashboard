@@ -10,6 +10,7 @@ import { ThreeDots } from "react-loader-spinner"
 import { useEffect, useRef } from "react";
 import { useGetMessagesQuery } from "../../features/chat/messageApiSlice";
 import { useSelector } from "react-redux";
+import MessageAction from './MessageAction'
 
 const MessageItem = ({ messageId }) => {
     const theme = useTheme();
@@ -36,6 +37,17 @@ const MessageItem = ({ messageId }) => {
                                 alignItems="end"
                                 sx={{ mr: "10px" }}
                             >
+                                <div className="reply-show-msg">
+                                    {message?.replyTo && message?.preText &&
+                                        <div className="d-flex">
+                                            <div className="d-flex flex-column ps-2">
+                                                <h6>{message?.user?.fullName}</h6>
+                                                <p>{message?.preText}</p>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                                {message?.image && < img src={message?.image} width="150px" height="150px" alt="image" />}
                                 <Typography
                                     variant="body1"
                                     sx={{
@@ -47,16 +59,7 @@ const MessageItem = ({ messageId }) => {
                                 >
                                     {message?.text}
                                 </Typography>
-                                {/* <Typography
-                                    variant="body1"
-                                    sx={{
-                                        backgroundColor: theme.palette.primary.main,
-                                        p: "10px",
-                                        borderRadius: "5px",
-                                        borderTopRightRadius: "0",
-                                    }}
-                                >
-                                </Typography> */}
+                                <MessageAction message={message} />
                             </Box>
                             <Avatar
                                 alt="Remy Sharp"
@@ -87,6 +90,15 @@ const MessageItem = ({ messageId }) => {
                                 alignItems="start"
                                 sx={{ ml: "10px" }}
                             >
+                                {message?.replyTo && message?.preText &&
+                                    <div className="d-flex">
+                                        <div className="d-flex flex-column ps-2">
+                                            <h6>{message?.user?.fullName}</h6>
+                                            <p>{message?.preText}</p>
+                                        </div>
+                                    </div>
+                                }
+                                {message?.image && < img src={message?.image} width="150px" height="150px" alt="image" />}
                                 <Typography
                                     variant="body1"
                                     sx={{

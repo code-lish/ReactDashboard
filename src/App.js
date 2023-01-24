@@ -29,6 +29,7 @@ const PackageService = lazy(() =>
 );
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
+const User = lazy(() => import("./pages/users/User"));
 const Blog = lazy(() => import("./pages/blogs/Blog"));
 const SingleBlog = lazy(() => import("./pages/blogs/SingelBlog"));
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
@@ -46,65 +47,73 @@ const App = () => {
           <Route path="reset-password" element={<ResetPassword />} />
         </Route>
 
-        {/* <Route element={<PersistLogin />}> */}
-        {/* <Route element={<Prefetch />}> */}
-        <Route path="/dashboard" element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route
-            path="faq"
-            element={
-              <Protected role="media">
-                <Faq />
-              </Protected>
-            }
-          />
-          <Route
-            path="faq/:id"
-            element={
-              <Protected role="media">
-                <SingleFaq />
-              </Protected>
-            }
-          />
-          <Route
-            path="contact-us"
-            element={
-              <Protected>
-                <ContactUS />
-              </Protected>
-            }
-          />
-          <Route
-            path="package-services"
-            element={
-              <Protected role="sales">
-                <PackageService />
-              </Protected>
-            }
-          />
+        <Route element={<PersistLogin />}>
+          <Route element={<Prefetch />}>
+            <Route path="/dashboard" element={<Layout />}>
+              <Route index element={<Dashboard />} />
+              <Route
+                path="users"
+                element={
+                  <Protected>
+                    <User />
+                  </Protected>
+                }
+              />
+              <Route
+                path="faq"
+                element={
+                  <Protected role="media">
+                    <Faq />
+                  </Protected>
+                }
+              />
+              <Route
+                path="faq/:id"
+                element={
+                  <Protected role="media">
+                    <SingleFaq />
+                  </Protected>
+                }
+              />
+              <Route
+                path="contact-us"
+                element={
+                  <Protected>
+                    <ContactUS />
+                  </Protected>
+                }
+              />
+              <Route
+                path="package-services"
+                element={
+                  <Protected role="sales">
+                    <PackageService />
+                  </Protected>
+                }
+              />
 
-          <Route
-            path="jobs"
-            element={
-              <Protected>
-                <Job />
-              </Protected>
-            }
-          />
+              <Route
+                path="jobs"
+                element={
+                  <Protected>
+                    <Job />
+                  </Protected>
+                }
+              />
 
-          <Route path="packages">
-            <Route index element={<Packages />} />
-            <Route path="create" element={<CreatePackage />} />
-            <Route path="edit/:id" element={<EditPackage />} />
+              <Route path="packages">
+                <Route index element={<Packages />} />
+                <Route path="create" element={<CreatePackage />} />
+                <Route path="edit/:id" element={<EditPackage />} />
+              </Route>
+
+              <Route path="blogs" element={<Blog />} />
+              <Route path="blogs/:id" element={<SingleBlog />} />
+
+              <Route path="chat" element={<Chat />} />
+            </Route>
           </Route>
-
-          <Route path="blogs" element={<Blog />} />
-          <Route path="blogs/:id" element={<SingleBlog />} />
-
-          <Route path="chat" element={<Chat />} />
         </Route>
-        {/* </Route> */}
-        {/* </Route> */}
 
         <Route path="/unauthorized" element={<Unauthorized />} />
         <Route path="*" element={<NotFound />} />

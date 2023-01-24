@@ -114,7 +114,7 @@ const Chat = () => {
               >
                 Chats
               </Typography>
-              {content}
+              {content ? content : <h5 className="d-flex justify-content-center">No Chats Are Exists!</h5>}
             </Box>
           </Grid>
 

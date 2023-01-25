@@ -3,6 +3,17 @@ import {
     createEntityAdapter
 } from "@reduxjs/toolkit";
 import { apiSlice } from "../../app/apiSlice"
+import { io } from 'socket.io-client'
+
+let socket
+function getSocket() {
+    if (!socket) {
+        socket = io("http://localhost:5000", {
+            withCredentials: true,
+        });
+    }
+    return socket;
+}
 
 const messagesAdapter = createEntityAdapter()
 
@@ -31,7 +42,35 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
                         ...result.ids.map(id => ({ type: 'Message', id }))
                     ]
                 } else return [{ type: 'Message', id: 'LIST' }]
-            }
+            },
+            async onCacheEntryAdded(
+                arg,
+                { cacheDataLoaded, cacheEntryRemoved, updateCachedData },
+            ) {
+                try {
+                    await cacheDataLoaded;  
+
+                    socket.on('connect', () => socket.emit("setup", { userId: "userId", room: "63875638g" }));
+
+                    socket.on("receive-message", (message) => {
+                        console.log({ message });
+                        updateCachedData((draft) => {
+                            console.log(draft);
+                            draft.push(message);
+                        });
+                    });
+
+                    await cacheEntryRemoved;
+
+                    socket.off('connect');
+                    socket.off("ChatEvent.SendAllMessages");
+                    socket.off("receive-message");
+                } catch (error) {
+                    console.log({ error });
+                    // if cacheEntryRemoved resolved before cacheDataLoaded,
+                    // cacheDataLoaded throws
+                }
+            },
         }),
         addMessage: builder.mutation({
             query: payload => {
@@ -40,6 +79,17 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
                     method: 'POST',
                     body: payload.formData,
                 })
+            },
+            async onQueryStarted(args, { queryFulfilled, dispatch }) {
+                try {
+                    const socket = getSocket();
+                    const { data } = await queryFulfilled
+
+                    socket.emit("send-message", data, { userId: "userId", room: "63875638g" });
+
+                } catch (error) {
+                    console.log({ error });
+                }
             },
             invalidatesTags: [
                 { type: 'Message', id: "LIST" }
@@ -60,7 +110,7 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
         replyMessage: builder.mutation({
             query: (payload) => {
                 return ({
-                    url: `/admin/ticket/${payload.chatId}/message/${payload.msgId}/reply`,
+                    url: `/ admin / ticket / ${payload.chatId} / message / ${payload.msgId} / reply`,
                     method: 'POST',
                     body: {
                         text: payload.text,
@@ -75,7 +125,7 @@ export const messagesApiSlice = apiSlice.injectEndpoints({
         deleteMessage: builder.mutation({
             query: (payload) => {
                 return ({
-                    url: `/admin/ticket/${payload.chatId}/message/${payload.msgId}`,
+                    url: `/ admin / ticket / ${payload.chatId} / message / ${payload.msgId}`,
                     method: 'DELETE'
                 })
             },

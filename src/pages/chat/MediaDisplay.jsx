@@ -1,5 +1,5 @@
 import React from 'react'
-import { assetURI } from '../../utils/assetURI'
+import { assetURI } from '../../utils/tools'
 import { useDispatch, useSelector } from 'react-redux'
 import { setMessageDetails } from '../../features/general/generalSlice'
 import { CloseFullscreenTwoTone } from "@mui/icons-material";

@@ -24,6 +24,34 @@ export const chatApiSlice = apiSlice.injectEndpoints({
                 });
                 return chatAdapter.setAll(initialState, loadedChats);
             },
+            async onCacheEntryAdded(
+                arg,
+                { cacheDataLoaded, cacheEntryRemoved, updateCachedData, getState },
+            ) {
+                try {
+                    await cacheDataLoaded;
+
+                    const socket = getState().general?.socket
+
+                    socket?.on("chat-lists", (chat) => {
+                        chat.id = chat?._id
+                        console.log("324", chat);
+                        updateCachedData((draft) => {
+                            chatAdapter.upsertOne(draft, chat)
+                        });
+                    });
+
+                    await cacheEntryRemoved;
+
+                    socket.off('connect');
+                    socket.off("ChatEvent.SendAllMessages");
+                    socket.off("chat-lists");
+                } catch (error) {
+                    console.log({ error });
+                    // if cacheEntryRemoved resolved before cacheDataLoaded,
+                    // cacheDataLoaded throws
+                }
+            },
             providesTags: (result, error, arg) => {
                 if (result?.ids) {
                     return [

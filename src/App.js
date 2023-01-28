@@ -30,6 +30,8 @@ const PackageService = lazy(() =>
 const Job = lazy(() => import("./pages/job/Job"));
 const Packages = lazy(() => import("./pages/packages/Packages"));
 const User = lazy(() => import("./pages/users/User"));
+const CreateUser = lazy(() => import("./pages/users/CreateUser"));
+const EditUser = lazy(() => import("./pages/users/EditUser"));
 const Blog = lazy(() => import("./pages/blogs/Blog"));
 const SingleBlog = lazy(() => import("./pages/blogs/SingelBlog"));
 const CreatePackage = lazy(() => import("./pages/packages/CreatePackage"));
@@ -51,14 +53,23 @@ const App = () => {
           <Route element={<Prefetch />}>
             <Route path="/dashboard" element={<Layout />}>
               <Route index element={<Dashboard />} />
-              <Route
-                path="users"
-                element={
+              <Route path="users">
+                <Route index element={
                   <Protected>
                     <User />
-                  </Protected>
-                }
-              />
+                  </Protected>}
+                />
+                <Route path="create" element={
+                  <Protected>
+                    <CreateUser />
+                  </Protected>}
+                />
+                <Route path="edit" element={
+                  <Protected>
+                    <EditUser />
+                  </Protected>}
+                />
+              </Route>
               <Route
                 path="faq"
                 element={

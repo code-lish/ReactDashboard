@@ -5,23 +5,25 @@ import {
   Divider,
   IconButton,
   useTheme,
-  Typography,
-  InputBase,
+  Typography
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
 import profile from "../../assets/img/profile.jpeg";
 import { VideoCall, Call, KeyboardVoice, DoneAll } from "@mui/icons-material";
 import { CirclesWithBar } from "react-loader-spinner"
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGetMessagesQuery } from "../../features/chat/messageApiSlice";
 import { useSelector } from 'react-redux'
 import MessageItem from "./MessageItem";
 import ChatForm from "./ChatForm";
 
 const Messages = ({ chatId }) => {
-  const theme = useTheme();
+  const [isTyping, setIsTyping] = useState(false)
 
+  const theme = useTheme();
   const scrollRef = useRef()
+
+  const { socket } = useSelector(state => state.general)
 
   const {
     data: messages,
@@ -41,6 +43,18 @@ const Messages = ({ chatId }) => {
     }
 
   }, [messages])
+
+  useEffect(() => {
+    socket.on("typing", () => setIsTyping(true))
+    socket.on("stop-type", () => setIsTyping(false))
+
+    // socket.on("close-chat-box", () => { 
+    //   setOpenChat(false)
+    //   setMessages(() => [])
+    //   chatContent.messages = []
+    // })
+
+  }, [socket])
 
   let content
   if (isLoading) return <CirclesWithBar color="#00b8a5 " height="50" width="50"
@@ -117,6 +131,7 @@ const Messages = ({ chatId }) => {
           sx={{ p: "20px", overflowY: "scroll", height: "70vh" }}
         >
           {content}
+          {isTyping && 'typing..'}
         </Box>
       </Box>
     );

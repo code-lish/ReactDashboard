@@ -25,7 +25,8 @@ const ChatForm = ({ chatId }) => {
     const dispatch = useDispatch()
     const { t } = useTranslation()
 
-    const { messageDetails } = useSelector((state) => state.general)
+    const { userInfo } = useSelector((state) => state.auth)
+    const { messageDetails, socket } = useSelector((state) => state.general)
 
     useEffect(() => {
         if (messageDetails?.type === 'edit') {
@@ -45,6 +46,15 @@ const ChatForm = ({ chatId }) => {
         addReplyMessage,
         { isSuccess: isReplySuccess, isError: isReplyError, error: Replyerror },
     ] = useReplyMessageMutation()
+
+    const handleText = (e) => {
+        socket.emit("emit-typing", { userId: chatId, room: userInfo?.role })
+        setText(e.target.value)
+
+        setTimeout(() => socket.emit("stop-typing",
+            { userId: chatId, room: userInfo?.role }),
+            2000)
+    }
 
     const onChange = (e) => {
         const reader = new FileReader()
@@ -90,8 +100,6 @@ const ChatForm = ({ chatId }) => {
                 setImage(null)
                 setText('')
             }
-
-
         } catch (error) {
             console.log(error);
         }
@@ -121,7 +129,7 @@ const ChatForm = ({ chatId }) => {
                         sx={{ ml: "5px", fontWeight: "bold" }}
                         fullWidth
                         value={text}
-                        onChange={(e) => setText(e.target.value)}
+                        onChange={handleText}
                     />
                 </Box>
                 <FlexBetween>

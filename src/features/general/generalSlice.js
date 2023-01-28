@@ -5,6 +5,7 @@ const generalSlice = createSlice({
     initialState: {
         chatDetails: null,
         messageDetails: null,
+        socket: null
     },
     reducers: {
         setChatDetails: (state, action) => {
@@ -12,11 +13,15 @@ const generalSlice = createSlice({
         },
         setMessageDetails: (state, action) => {
             state.messageDetails = action.payload
+        },
+        setSocket: (state, action) => {
+            state.socket = action.payload
         }
     }
 })
 
 export const {
+    setSocket,
     setChatDetails,
     setMessageDetails
 } = generalSlice.actions

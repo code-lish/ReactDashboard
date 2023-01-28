@@ -27,11 +27,14 @@ import { useTranslation } from "react-i18next"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useDispatch, useSelector } from 'react-redux'
 import { setCredentials } from '../../features/auth/authSlice'
+import { setSocket } from '../../features/general/generalSlice'
 import usePersist from '../../hooks/UsePersist'
 import LoginSchema from "../../utils/validationSchema/LoginSchema"
 import { useLoginMutation } from "../../features/auth/authApiSlice";
 import { toast } from 'react-toastify'
 import Meta from '../../components/common/Meta'
+import { getSocket } from "../../utils/tools";
+const socket = getSocket()
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,8 +64,12 @@ const Login = () => {
 
   const onSubmitHandler = async (data) => {
     try {
+
+      dispatch(setSocket(socket))
       const userData = await login(data).unwrap()
       dispatch(setCredentials({ userData }))
+      socket.emit("new-user-add", userData?.id, socket.id, userData?.role)
+
       navigate('/dashboard')
       reset()
 

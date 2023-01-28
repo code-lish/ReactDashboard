@@ -17,6 +17,7 @@ import ManageTeam from "./pages/ManageTeam";
 import Line from "./pages/chartPages/Line";
 import Bar from "./pages/chartPages/Bar";
 import Pie from "./pages/chartPages/Pie";
+import AddContainer from "./pages/addContainer/AddContainer";
 
 function App() {
   const mode = useSelector(selectTheme);
@@ -29,7 +30,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Dashboard />} />
-            {/* Data pages */}
+            {/*pages */}
+            <Route path="add-container" element={<AddContainer />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="manageteam" element={<ManageTeam />} />

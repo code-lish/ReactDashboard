@@ -44,13 +44,10 @@ const LeftSidebar = () => {
       setSelected,
     },
     {
-      title: "Data",
-    },
-    {
-      title: "Manage Team",
-      to: "/manageteam",
+      title: "Add Container",
+      to: "/add-container",
       icon: (
-        <PeopleOutlined
+        <MarkUnreadChatAltOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
         />
       ),
@@ -58,7 +55,7 @@ const LeftSidebar = () => {
       setSelected,
     },
     {
-      title: "Contacts Information",
+      title: "Pending Container",
       to: "/contacts",
       icon: (
         <ContactsOutlined
@@ -69,43 +66,10 @@ const LeftSidebar = () => {
       setSelected,
     },
     {
-      title: "Invoices Balances",
+      title: "Recieved Container",
       to: "/invoices",
       icon: (
         <ReceiptOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
-    {
-      title: "Orders",
-      to: "/orders",
-      icon: (
-        <MarkUnreadChatAltOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
-    {
-      title: "Menus",
-      to: "/menu",
-      icon: (
-        <RestaurantMenuOutlined
-          sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
-        />
-      ),
-      selected,
-      setSelected,
-    },
-    {
-      title: "Customers",
-      to: "/customers",
-      icon: (
-        <PeopleAltOutlined
           sx={{ fontSize: "25px", color: theme.palette.black[1000] }}
         />
       ),

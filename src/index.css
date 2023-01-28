@@ -19,3 +19,10 @@
 .scrollbar:hover ::-webkit-scrollbar-thumb{
    background: #21295c;
 }
+
+
+@media screen {
+	.component-to-print {
+		visibility: hidden;
+	}
+}
